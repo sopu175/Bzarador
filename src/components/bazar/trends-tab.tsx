@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   LineChart,
   Line,
@@ -13,8 +13,9 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-import { Activity, TrendingUp, TrendingDown, ArrowUpDown } from "lucide-react";
+import { Activity, TrendingUp, TrendingDown, ArrowUpDown, Globe, Loader2 } from "lucide-react";
 import { useT, useTr, useTCat, useNum, useLang, useTUnit } from "@/lib/i18n";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Select,
@@ -27,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 type Item = {
   id: string;
@@ -69,12 +71,34 @@ export function TrendsTab() {
   const tUnit = useTUnit();
   const num = useNum();
   const lang = useLang((s) => s.lang);
+  const qc = useQueryClient();
 
   const { data: itemsData } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
   const { data: marketsData } = useQuery({ queryKey: ["markets-flat"], queryFn: fetchMarkets });
 
   const [itemId, setItemId] = useState("");
   const [marketId, setMarketId] = useState<string>("all");
+  const [fetchingItem, setFetchingItem] = useState(false);
+
+  async function onFetchItemLive() {
+    if (!effectiveItemId) return;
+    setFetchingItem(true);
+    try {
+      const res = await fetch(`/api/items/live?itemId=${effectiveItemId}`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || "failed");
+      toast.success(t("liveItemSuccess"), {
+        description: `${tr(item?.nameBn ?? "", item?.nameEn ?? "")}: ${num(data.price)}৳ · ${data.sourceName}`,
+      });
+      qc.invalidateQueries({ queryKey: ["trend"] });
+      qc.invalidateQueries({ queryKey: ["prices"] });
+      qc.invalidateQueries({ queryKey: ["live-status"] });
+    } catch (e) {
+      toast.error(t("liveItemError"), { description: (e as Error).message });
+    } finally {
+      setFetchingItem(false);
+    }
+  }
 
   // Derive a default item id from the first available category
   const firstItemId =
@@ -169,14 +193,29 @@ export function TrendsTab() {
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
               <span className="text-4xl">{item.emoji}</span>
-              <div>
-                <CardTitle className="text-lg flex items-center gap-2">
+              <div className="min-w-0 flex-1">
+                <CardTitle className="text-lg flex items-center gap-2 truncate">
                   {tr(item.nameBn, item.nameEn)}
                 </CardTitle>
                 <CardDescription className="text-xs">
                   {tCat(item.category)} · {t("perUnit")} {tUnit(item.unit)}
                 </CardDescription>
               </div>
+              <Button
+                onClick={onFetchItemLive}
+                disabled={fetchingItem}
+                variant="outline"
+                size="sm"
+                className="shrink-0 gap-1.5 border-primary/40 text-primary hover:bg-primary/10"
+              >
+                {fetchingItem ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Globe className="h-3.5 w-3.5" />
+                )}
+                <span className="hidden sm:inline">{t("liveFetchItem")}</span>
+                <span className="sm:hidden">{t("liveBadge")}</span>
+              </Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">

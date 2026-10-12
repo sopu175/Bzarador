@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, TrendingUp, TrendingDown, PackageOpen, Flame } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, PackageOpen, Radio } from "lucide-react";
 import { useT, useTr, useTUnit, useTCat, useNum, useLang } from "@/lib/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,9 @@ type PriceRow = {
   change: number;
   changePct: number;
   reportCount: number;
+  liveSource: string | null;
+  liveSourceUrl: string | null;
+  liveAt: string | null;
 };
 
 async function fetchPrices(): Promise<{ prices: PriceRow[] }> {
@@ -43,6 +46,7 @@ export function TodayTab() {
   const lang = useLang((s) => s.lang);
   const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState<string>("all");
+  const [liveOnly, setLiveOnly] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["prices", "all"],
@@ -60,6 +64,7 @@ export function TodayTab() {
   const filtered = useMemo(() => {
     let list = prices;
     if (activeCat !== "all") list = list.filter((p) => p.item.category === activeCat);
+    if (liveOnly) list = list.filter((p) => !!p.liveSource);
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(
@@ -68,8 +73,15 @@ export function TodayTab() {
           p.item.nameEn.toLowerCase().includes(q)
       );
     }
+    // Live prices first
+    list = [...list].sort((a, b) => {
+      if (!!a.liveSource !== !!b.liveSource) return a.liveSource ? -1 : 1;
+      return 0;
+    });
     return list;
-  }, [prices, activeCat, search]);
+  }, [prices, activeCat, liveOnly, search]);
+
+  const liveCount = prices.filter((p) => p.liveSource).length;
 
   const gainers = useMemo(
     () =>
@@ -116,6 +128,20 @@ export function TodayTab() {
               {c === "all" ? t("allMarkets") : tCat(c)}
             </button>
           ))}
+          {liveCount > 0 && (
+            <button
+              onClick={() => setLiveOnly((v) => !v)}
+              className={cn(
+                "shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium border transition-colors inline-flex items-center gap-1.5",
+                liveOnly
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-foreground/70 border-border hover:bg-secondary"
+              )}
+            >
+              <Radio className="h-3.5 w-3.5" />
+              {t("liveBadge")} {num(liveCount)}
+            </button>
+          )}
         </div>
       </div>
 
@@ -186,6 +212,7 @@ function PriceRowCard({ row }: { row: PriceRow }) {
   const tUnit = useTUnit();
   const num = useNum();
   const tCat = useTCat();
+  const lang = useLang((s) => s.lang);
   return (
     <div className="flex items-center gap-3 p-3.5 hover:bg-secondary/50 transition-colors">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-2xl">
@@ -196,12 +223,36 @@ function PriceRowCard({ row }: { row: PriceRow }) {
           <span className="font-semibold truncate">
             {tr(row.item.nameBn, row.item.nameEn)}
           </span>
+          {row.liveSource && (
+            <a
+              href={row.liveSourceUrl ?? undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={row.liveSourceUrl ?? row.liveSource}
+              className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-1.5 py-0.5 text-[10px] font-semibold hover:bg-primary/20 transition-colors"
+            >
+              <Radio className="h-2.5 w-2.5" />
+              {t("liveBadge")}
+            </a>
+          )}
           <Badge variant="outline" className="text-[10px] px-1.5 py-0 hidden sm:inline-flex">
             {tCat(row.item.category)}
           </Badge>
         </div>
-        <div className="text-xs text-muted-foreground mt-0.5">
-          {t("perUnit")} {tUnit(row.item.unit)}
+        <div className="text-xs text-muted-foreground mt-0.5 truncate">
+          {row.liveSource ? (
+            <span className="inline-flex items-center gap-1">
+              {t("liveFrom")} {row.liveSource}
+              {row.liveAt && (
+                <>
+                  {" · "}
+                  {formatTime(row.liveAt, lang)}
+                </>
+              )}
+            </span>
+          ) : (
+            <span>{t("perUnit")} {tUnit(row.item.unit)}</span>
+          )}
         </div>
       </div>
       <div className="text-right">
@@ -281,4 +332,13 @@ function MoversCard({
       </CardContent>
     </Card>
   );
+}
+
+function formatTime(iso: string, lang: "bn" | "en") {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleString(lang === "bn" ? "bn-BD" : "en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }

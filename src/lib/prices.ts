@@ -49,6 +49,9 @@ export async function getLatestPrices(marketId?: string) {
     change: number;
     changePct: number;
     reportCount: number;
+    liveSource: string | null;
+    liveSourceUrl: string | null;
+    liveAt: string | null;
   }> = [];
 
   for (const [, entry] of byItem) {
@@ -64,6 +67,9 @@ export async function getLatestPrices(marketId?: string) {
       ? (change / avgYesterday) * 100
       : 0;
 
+    // Find the most recent live-sourced report (today), if any
+    const liveReport = entry.todayReports.find((r) => r.sourceName);
+
     result.push({
       item: entry.item,
       avgToday: avgToday != null ? Math.round(avgToday) : null,
@@ -71,6 +77,9 @@ export async function getLatestPrices(marketId?: string) {
       change: Math.round(change),
       changePct: Math.round(changePct * 10) / 10,
       reportCount: entry.todayReports.length,
+      liveSource: liveReport?.sourceName ?? null,
+      liveSourceUrl: liveReport?.sourceUrl ?? null,
+      liveAt: liveReport?.reportedAt?.toISOString() ?? null,
     });
   }
 

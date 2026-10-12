@@ -1,0 +1,162 @@
+"use client";
+
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { RefreshCw, Globe, Loader2, Clock, Radio } from "lucide-react";
+import { useT, useLang } from "@/lib/i18n";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+type LiveStatus = {
+  lastRefresh: {
+    id: string;
+    startedAt: string;
+    finishedAt: string | null;
+    status: string;
+    itemsFetched: number;
+    sourcesUsed: string;
+    error: string | null;
+  } | null;
+  todayLiveReports: number;
+};
+
+async function fetchStatus(): Promise<LiveStatus> {
+  const res = await fetch("/api/prices/live");
+  if (!res.ok) throw new Error("failed");
+  return res.json();
+}
+
+export function LiveUpdatePanel() {
+  const t = useT();
+  const lang = useLang((s) => s.lang);
+  const qc = useQueryClient();
+  const [fetching, setFetching] = useState(false);
+
+  const { data: status } = useQuery({
+    queryKey: ["live-status"],
+    queryFn: fetchStatus,
+    staleTime: 30_000,
+  });
+
+  async function onFetch() {
+    setFetching(true);
+    try {
+      const res = await fetch("/api/prices/live", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "failed");
+      }
+      toast.success(t("liveSuccess"), {
+        description: t("liveSuccessDesc").replace("{n}", String(data.itemsFetched)),
+      });
+      // Invalidate all price queries so new live prices show up
+      qc.invalidateQueries({ queryKey: ["prices"] });
+      qc.invalidateQueries({ queryKey: ["trend"] });
+      qc.invalidateQueries({ queryKey: ["live-status"] });
+      qc.invalidateQueries({ queryKey: ["stats"] });
+    } catch (e) {
+      toast.error(t("liveError"), { description: (e as Error).message });
+    } finally {
+      setFetching(false);
+    }
+  }
+
+  const last = status?.lastRefresh;
+  const sources = last?.sourcesUsed ? last.sourcesUsed.split(", ").filter(Boolean) : [];
+
+  return (
+    <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/8 via-card to-accent/20 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <Globe className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="font-semibold flex items-center gap-2">
+              {t("liveUpdate")}
+              <Badge variant="outline" className="text-[10px] gap-1 border-primary/40 text-primary">
+                <Radio className="h-2.5 w-2.5" />
+                {t("liveBadge")}
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {lang === "bn"
+                ? "অনলাইন থেকে আজকের বাস্তব বাজার দাম সংগ্রহ করুন"
+                : "Pull today's real market prices from the web"}
+            </p>
+          </div>
+        </div>
+        <Button onClick={onFetch} disabled={fetching} className="shrink-0 h-9">
+          {fetching ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span className="hidden sm:inline">{t("liveFetching")}</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-4 w-4" />
+              {last ? t("liveRefresh") : t("liveFetchBtn")}
+            </>
+          )}
+        </Button>
+      </div>
+
+      {/* Status row */}
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+        {last ? (
+          <>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              {t("liveLastUpdated")}:{" "}
+              <span className="font-medium text-foreground">
+                {formatTime(last.finishedAt ?? last.startedAt, lang)}
+              </span>
+            </span>
+            {last.itemsFetched > 0 && (
+              <span>
+                <span className="font-semibold text-primary">{last.itemsFetched}</span>{" "}
+                {t("reportCount")}
+              </span>
+            )}
+            {sources.length > 0 && (
+              <span className="inline-flex items-center gap-1.5 flex-wrap">
+                {t("liveSources")}:
+                {sources.map((s) => (
+                  <Badge key={s} variant="secondary" className="text-[10px] py-0">
+                    {s}
+                  </Badge>
+                ))}
+              </span>
+            )}
+            {last.status === "error" && (
+              <span className="text-destructive">⚠ {last.error?.slice(0, 60)}</span>
+            )}
+          </>
+        ) : (
+          <span>{t("liveNever")}</span>
+        )}
+        {status && status.todayLiveReports > 0 && (
+          <span className="ml-auto inline-flex items-center gap-1">
+            <Radio className="h-3 w-3 text-primary" />
+            <span className="font-semibold text-primary">{status.todayLiveReports}</span>{" "}
+            {t("liveReportsToday")}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function formatTime(iso: string, lang: "bn" | "en") {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
+  const opts: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  const s = d.toLocaleString(lang === "bn" ? "bn-BD" : "en-GB", opts);
+  return s;
+}

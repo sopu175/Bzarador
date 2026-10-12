@@ -147,6 +147,24 @@ const dict = {
     bn: "আর কখনো ঠকবেন না। আপনার স্থানীয় বাজারের আসল দাম জানুন।",
     en: "Never get overcharged again. Know the real prices at your local market.",
   },
+  // Live update
+  liveUpdate: { bn: "লাইভ দাম আপডেট", en: "Live Update" },
+  liveFetchBtn: { bn: "অনলাইন থেকে আনুন", en: "Fetch Live Prices" },
+  liveFetching: { bn: "আনা হচ্ছে... একটি মিনিট সময় লাগতে পারে", en: "Fetching... may take a minute" },
+  liveSuccess: { bn: "লাইভ দাম আপডেট হয়েছে!", en: "Live prices updated!" },
+  liveSuccessDesc: { bn: "{n} টি পণ্যের দাম অনলাইন থেকে আনা হয়েছে।", en: "Fetched prices for {n} items from the web." },
+  liveError: { bn: "লাইভ আপডেট ব্যর্থ হয়েছে। পরে আবার চেষ্টা করুন।", en: "Live update failed. Try again later." },
+  liveLastUpdated: { bn: "সর্বশেষ আপডেট", en: "Last updated" },
+  liveSources: { bn: "উৎস", en: "Sources" },
+  liveNever: { bn: "এখনও লাইভ আপডেট হয়নি", en: "Never updated live" },
+  liveBadge: { bn: "লাইভ", en: "LIVE" },
+  liveFrom: { bn: "উৎস:", en: "From:" },
+  liveFetchItem: { bn: "এই পণ্যের লাইভ দাম আনুন", en: "Fetch live price for this item" },
+  liveFetchingItem: { bn: "আনা হচ্ছে...", en: "Fetching..." },
+  liveItemSuccess: { bn: "লাইভ দাম পাওয়া গেছে!", en: "Live price fetched!" },
+  liveItemError: { bn: "লাইভ দাম পাওয়া যায়নি।", en: "Could not fetch live price." },
+  liveReportsToday: { bn: "টি লাইভ দাম আজ", en: "live prices today" },
+  liveRefresh: { bn: "আবার আপডেট করুন", en: "Refresh again" },
 } as const;
 
 export type DictKey = keyof typeof dict;

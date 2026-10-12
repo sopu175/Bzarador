@@ -23,6 +23,7 @@ import { MarketsTab } from "@/components/bazar/markets-tab";
 import { ReportTab } from "@/components/bazar/report-tab";
 import { TrendsTab } from "@/components/bazar/trends-tab";
 import { AlertsTab } from "@/components/bazar/alerts-tab";
+import { LiveUpdatePanel } from "@/components/bazar/live-update-panel";
 import { useT, useNum, useLang } from "@/lib/i18n";
 
 export default function Home() {
@@ -43,6 +44,7 @@ function AppShell() {
       <Header />
       <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-5 space-y-5">
         <Hero />
+        <LiveUpdatePanel />
         <Tabs defaultValue="today" className="w-full">
           <TabsList className="grid grid-cols-5 w-full h-auto p-1 rounded-2xl">
             <TabsTrigger value="today" className="flex flex-col gap-1 py-2 text-xs sm:flex-row sm:text-sm">

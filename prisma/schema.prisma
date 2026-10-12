@@ -37,6 +37,7 @@ model Market {
 }
 
 // A user-reported price for an item at a market on a given day
+// When sourceName is set, the price came from an online live source (not a human)
 model PriceReport {
   id            String   @id @default(cuid())
   itemId        String
@@ -45,12 +46,16 @@ model PriceReport {
   reporterName  String   @default("Anonymous")
   reporterPhone String?
   reportedAt    DateTime @default(now())
+  // Live-source provenance (null for human-submitted reports)
+  sourceName    String?  // e.g. "The Daily Star", "DAM", "Jago News 24"
+  sourceUrl     String?
 
   item          Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
   market        Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
   @@index([itemId, marketId, reportedAt])
   @@index([marketId, reportedAt])
+  @@index([sourceName])
 }
 
 // A user-requested alert when an item's price crosses a threshold
@@ -64,4 +69,15 @@ model PriceAlert {
   createdAt    DateTime @default(now())
 
   item         Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+// Tracks each "live refresh" run so the UI can show last-updated time + counts
+model LiveFetchLog {
+  id           String   @id @default(cuid())
+  startedAt    DateTime @default(now())
+  finishedAt   DateTime?
+  status       String   @default("running") // running | done | error
+  itemsFetched Int      @default(0)
+  sourcesUsed  String   // comma-joined source names
+  error        String?
 }
