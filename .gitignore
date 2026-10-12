@@ -40,8 +40,7 @@ dev.log
 dev.out.log
 server.log
 
-# Database files & backups (Keep .git clean, backup data kept locally)
-db/*.db
+# Database files & backups (custom.db is committed so serverless platforms like Vercel have initial data)
 db/*.db-journal
 db/backups/
 
