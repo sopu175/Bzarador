@@ -67,107 +67,110 @@ export function LiveUpdatePanel() {
   const sources = last?.sourcesUsed ? last.sourcesUsed.split(", ").filter(Boolean) : [];
 
   return (
-    <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/8 via-card to-accent/20 p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3 min-w-0">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Globe className="h-5 w-5" />
+    <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/8 via-card to-accent/20 p-3.5 sm:p-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div className="flex items-start gap-2.5 sm:gap-3 min-w-0">
+          <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs mt-0.5">
+            <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="min-w-0">
-            <div className="font-semibold flex items-center gap-2">
-              {t("liveUpdate")}
-              <Badge variant="outline" className="text-[10px] gap-1 border-primary/40 text-primary">
-                <Radio className="h-2.5 w-2.5" />
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold text-sm sm:text-base flex items-center gap-1.5 flex-wrap">
+              <span>{t("liveUpdate")}</span>
+              <Badge variant="outline" className="text-[10px] py-0 gap-1 border-primary/40 text-primary">
+                <Radio className="h-2 w-2" />
                 {t("liveBadge")}
               </Badge>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5 leading-normal">
               {lang === "bn"
                 ? "অনলাইন থেকে আজকের বাস্তব বাজার দাম সংগ্রহ করুন"
                 : "Pull today's real market prices from the web"}
             </p>
           </div>
         </div>
-        <Button onClick={onFetch} disabled={fetching} className="shrink-0 h-9">
+        <Button onClick={onFetch} disabled={fetching} className="w-full sm:w-auto shrink-0 h-8 sm:h-9 text-xs sm:text-sm shadow-xs">
           {fetching ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="hidden sm:inline">{t("liveFetching")}</span>
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <span>{t("liveFetching")}</span>
             </>
           ) : (
             <>
-              <RefreshCw className="h-4 w-4" />
-              {last ? t("liveRefresh") : t("liveFetchBtn")}
+              <RefreshCw className="h-3.5 w-3.5" />
+              <span>{last ? t("liveRefresh") : t("liveFetchBtn")}</span>
             </>
           )}
         </Button>
       </div>
 
       {/* Status row */}
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-        {last ? (
-          <>
-            <span className="inline-flex items-center gap-1">
-              <Clock className="h-3 w-3" />
-              {t("liveLastUpdated")}:{" "}
-              <span className="font-medium text-foreground">
-                {formatTime(last.finishedAt ?? last.startedAt, lang)}
+      <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-muted-foreground pt-2.5 border-t border-border/40">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] sm:text-xs">
+          {last ? (
+            <>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                <span>{t("liveLastUpdated")}:</span>
+                <span className="font-medium text-foreground">
+                  {formatTime(last.finishedAt ?? last.startedAt, lang)}
+                </span>
               </span>
-            </span>
-            {last.itemsFetched > 0 && (
-              <span>
-                <span className="font-semibold text-primary">{last.itemsFetched}</span>{" "}
-                {t("reportCount")}
-              </span>
-            )}
-            {sources.length > 0 && (
-              <span className="inline-flex items-center gap-1.5 flex-wrap">
-                {t("liveSources")}:
-                {sources.map((s) => {
-                  let href = "https://www.google.com/search?q=" + encodeURIComponent(s + " বাজার দর বাংলাদেশ");
-                  const sLower = s.toLowerCase();
-                  if (sLower.includes("tbs") || sLower.includes("business standard")) href = "https://www.tbsnews.net";
-                  else if (sLower.includes("dhaka tribune")) href = "https://www.dhakatribune.com";
-                  else if (sLower.includes("daily star")) href = "https://www.thedailystar.net";
-                  else if (sLower.includes("prothom alo")) href = "https://www.prothomalo.com";
-                  else if (sLower.includes("ittefaq")) href = "https://www.ittefaq.com.bd";
-                  else if (sLower.includes("jago news")) href = "https://www.jagonews24.com";
-                  else if (sLower.includes("dhaka post")) href = "https://www.dhakapost.com";
-                  else if (sLower.includes("dam") || sLower.includes("কৃষি বিপণন")) href = "http://www.dam.gov.bd";
+              {last.itemsFetched > 0 && (
+                <span>
+                  <span className="font-semibold text-primary">{last.itemsFetched}</span>{" "}
+                  {t("reportCount")}
+                </span>
+              )}
+              {sources.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 flex-wrap">
+                  <span>{t("liveSources")}:</span>
+                  {sources.map((s) => {
+                    let href = "https://www.google.com/search?q=" + encodeURIComponent(s + " বাজার দর বাংলাদেশ");
+                    const sLower = s.toLowerCase();
+                    if (sLower.includes("tbs") || sLower.includes("business standard")) href = "https://www.tbsnews.net";
+                    else if (sLower.includes("dhaka tribune")) href = "https://www.dhakatribune.com";
+                    else if (sLower.includes("daily star")) href = "https://www.thedailystar.net";
+                    else if (sLower.includes("prothom alo")) href = "https://www.prothomalo.com";
+                    else if (sLower.includes("ittefaq")) href = "https://www.ittefaq.com.bd";
+                    else if (sLower.includes("jago news")) href = "https://www.jagonews24.com";
+                    else if (sLower.includes("dhaka post")) href = "https://www.dhakapost.com";
+                    else if (sLower.includes("dam") || sLower.includes("কৃষি বিপণন")) href = "http://www.dam.gov.bd";
 
-                  return (
-                    <a
-                      key={s}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
-                    >
-                      <Badge variant="secondary" className="text-[10px] py-0 cursor-pointer hover:bg-primary/15 hover:text-primary">
-                        {s} ↗
-                      </Badge>
-                    </a>
-                  );
-                })}
-              </span>
-            )}
-            {last.status === "error" && (
-              <span className="text-destructive">⚠ {last.error?.slice(0, 60)}</span>
-            )}
-          </>
-        ) : (
-          <span>{t("liveNever")}</span>
-        )}
+                    return (
+                      <a
+                        key={s}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
+                      >
+                        <Badge variant="secondary" className="text-[10px] py-0 cursor-pointer hover:bg-primary/15 hover:text-primary">
+                          {s} ↗
+                        </Badge>
+                      </a>
+                    );
+                  })}
+                </span>
+              )}
+              {last.status === "error" && (
+                <span className="text-destructive">⚠ {last.error?.slice(0, 60)}</span>
+              )}
+            </>
+          ) : (
+            <span>{t("liveNever")}</span>
+          )}
+        </div>
+
         {status && status.todayLiveReports > 0 && (
           <span
-            className="ml-auto inline-flex items-center gap-1.5 bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20"
+            className="inline-flex items-center gap-1.5 bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20 text-[11px] sm:text-xs self-start sm:self-auto shrink-0"
             title={
               lang === "bn"
                 ? "দেশজুড়ে ১১টি বাজারে ৫৪টি পণ্যের জন্য আজ মোট সংগৃহীত লাইভ দামের রিপোর্ট সংখ্যা"
                 : "Total live price entries collected today across 11 markets for all 54 items"
             }
           >
-            <Radio className="h-3 w-3 text-primary animate-pulse" />
+            <Radio className="h-2.5 w-2.5 text-primary animate-pulse" />
             <span className="font-semibold text-primary">{num(status.todayLiveReports)}</span>{" "}
             <span>{t("liveReportsToday")}</span>
           </span>

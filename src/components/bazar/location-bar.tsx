@@ -77,49 +77,49 @@ export function LocationBar({ onMarketFilter }: { onMarketFilter?: (marketId: st
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-semibold text-foreground flex items-center gap-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] sm:text-xs font-semibold text-foreground flex items-center gap-1">
                 <MapPin className="h-3 w-3 text-primary shrink-0" />
-                {lang === "bn" ? "আপনার বর্তমান অবস্থান:" : "Your Current Location:"}
+                <span>{lang === "bn" ? "আপনার অবস্থান:" : "Location:"}</span>
               </span>
               {location && (
                 <Badge
                   variant="secondary"
-                  className="text-[10px] py-0 px-2 bg-background/80 text-foreground border-border/60 font-medium"
+                  className="text-[9px] sm:text-[10px] py-0 px-1.5 bg-background/80 text-foreground border-border/60 font-medium"
                 >
                   {location.isAutoDetected ? (
                     <span className="flex items-center gap-1 text-primary">
-                      <Sparkles className="h-2.5 w-2.5" />
-                      {lang === "bn" ? "অটো ডিটেক্টেড" : "Auto Detected"}
+                      <Sparkles className="h-2 w-2" />
+                      {lang === "bn" ? "অটো ডিটেক্টেড" : "Auto"}
                     </span>
                   ) : (
-                    <span>{lang === "bn" ? "নির্ধারিত অবস্থান" : "Configured Location"}</span>
+                    <span>{lang === "bn" ? "নির্ধারিত" : "Set"}</span>
                   )}
                 </Badge>
               )}
             </div>
 
-            <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 flex-wrap">
+            <div className="text-[11px] sm:text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 flex-wrap leading-normal">
               {location ? (
                 <>
                   <span className="font-semibold text-primary">
                     {tr(location.marketNameBn, location.marketNameEn)}
                   </span>
-                  <span>({location.district} জেলা)</span>
+                  <span>({location.district})</span>
                   <span>·</span>
                   <Link
                     href={`/markets/${marketSlug}`}
                     className="text-primary hover:underline font-medium inline-flex items-center gap-0.5"
                   >
-                    <span>{lang === "bn" ? "এই বাজারের দর দেখুন" : "View Market Prices"}</span>
-                    <ChevronRight className="h-3 w-3" />
+                    <span>{lang === "bn" ? "বাজার দর দেখুন" : "View Prices"}</span>
+                    <ChevronRight className="h-2.5 w-2.5" />
                   </Link>
                 </>
               ) : (
                 <span>
                   {isLoading
-                    ? (lang === "bn" ? "অবস্থান শনাক্ত করা হচ্ছে..." : "Detecting your location...")
-                    : (lang === "bn" ? "অবস্থান পাওয়া যায়নি, স্বয়ংক্রিয়ভাবে কারওয়ান বাজার নির্ধারিত" : "Defaulting to Karwan Bazar")}
+                    ? (lang === "bn" ? "অবস্থান শনাক্ত করা হচ্ছে..." : "Detecting location...")
+                    : (lang === "bn" ? "কারওয়ান বাজার নির্ধারিত" : "Defaulting to Karwan Bazar")}
                 </span>
               )}
             </div>

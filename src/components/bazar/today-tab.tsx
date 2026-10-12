@@ -228,9 +228,9 @@ export function TodayTab() {
         </div>
 
         {/* Secondary filters toolbar: Price Direction filter + Sorter */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1.5 border-t border-border/40">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-xs text-muted-foreground mr-1 flex items-center gap-1">
+            <span className="text-xs text-muted-foreground mr-1 flex items-center gap-1 shrink-0">
               <SlidersHorizontal className="h-3 w-3" />
               {lang === "bn" ? "ফিল্টার:" : "Filter:"}
             </span>
@@ -238,7 +238,7 @@ export function TodayTab() {
               <button
                 onClick={() => setFilterByMyMarket(!filterByMyMarket)}
                 className={cn(
-                  "rounded-lg px-2.5 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer",
+                  "rounded-lg px-2 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0",
                   filterByMyMarket
                     ? "bg-primary text-primary-foreground border-primary font-semibold shadow-2xs"
                     : "bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
@@ -254,7 +254,7 @@ export function TodayTab() {
                 setFilterByMyMarket(false);
               }}
               className={cn(
-                "rounded-lg px-2.5 py-1 text-xs font-medium border transition-colors cursor-pointer",
+                "rounded-lg px-2 py-1 text-xs font-medium border transition-colors cursor-pointer shrink-0",
                 directionFilter === "all" && !filterByMyMarket
                   ? "bg-secondary text-foreground border-border font-semibold"
                   : "bg-transparent text-muted-foreground border-transparent hover:bg-secondary/40"
@@ -265,7 +265,7 @@ export function TodayTab() {
             <button
               onClick={() => setDirectionFilter("gainers")}
               className={cn(
-                "rounded-lg px-2.5 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer",
+                "rounded-lg px-2 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0",
                 directionFilter === "gainers"
                   ? "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30 font-semibold"
                   : "bg-transparent text-muted-foreground border-transparent hover:bg-red-500/10"
@@ -277,7 +277,7 @@ export function TodayTab() {
             <button
               onClick={() => setDirectionFilter("losers")}
               className={cn(
-                "rounded-lg px-2.5 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer",
+                "rounded-lg px-2 py-1 text-xs font-medium border transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0",
                 directionFilter === "losers"
                   ? "bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/30 font-semibold"
                   : "bg-transparent text-muted-foreground border-transparent hover:bg-green-500/10"
@@ -289,7 +289,7 @@ export function TodayTab() {
             <button
               onClick={() => setDirectionFilter("steady")}
               className={cn(
-                "rounded-lg px-2.5 py-1 text-xs font-medium border transition-colors cursor-pointer",
+                "rounded-lg px-2 py-1 text-xs font-medium border transition-colors cursor-pointer shrink-0",
                 directionFilter === "steady"
                   ? "bg-secondary text-foreground border-border font-semibold"
                   : "bg-transparent text-muted-foreground border-transparent hover:bg-secondary/40"
@@ -300,13 +300,13 @@ export function TodayTab() {
           </div>
 
           {/* Sort dropdown */}
-          <div className="flex items-center gap-1.5 ml-auto">
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
+          <div className="flex items-center gap-1.5 w-full sm:w-auto justify-between sm:justify-end">
+            <span className="text-xs text-muted-foreground flex items-center gap-1 shrink-0">
               <ArrowUpDown className="h-3 w-3" />
               {t("sortLabel")}:
             </span>
             <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-              <SelectTrigger className="h-8 text-xs bg-card w-[150px]">
+              <SelectTrigger className="h-8 text-xs bg-card flex-1 sm:w-[150px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
