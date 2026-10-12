@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,20 +10,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+// Kitchen market items: vegetables, fish, meat, fruits, spices, rice, lentils, oil
+model Item {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  nameBn    String
+  nameEn    String
+  category  String   // vegetable | fish | meat | fruit | spice | rice | lentil | oil
+  unit      String   // kg | piece | litre | dozen
+  emoji     String   @default("🥬")
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  reports   PriceReport[]
+  alerts    PriceAlert[]
 }
 
-model Post {
+// A physical kitchen market (bazar) in a district/upazila
+model Market {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  nameBn    String
+  nameEn    String
+  district  String   // e.g. "Dhaka", "Chattogram"
+  upazila   String   // e.g. "Dhaka South", "Mirpur"
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  reports   PriceReport[]
+}
+
+// A user-reported price for an item at a market on a given day
+model PriceReport {
+  id            String   @id @default(cuid())
+  itemId        String
+  marketId      String
+  price         Float    // price per unit in Taka
+  reporterName  String   @default("Anonymous")
+  reporterPhone String?
+  reportedAt    DateTime @default(now())
+
+  item          Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  market        Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, marketId, reportedAt])
+  @@index([marketId, reportedAt])
+}
+
+// A user-requested alert when an item's price crosses a threshold
+model PriceAlert {
+  id           String   @id @default(cuid())
+  itemId       String
+  marketId     String?
+  targetPrice  Float
+  direction    String   // below | above
+  phone        String
+  createdAt    DateTime @default(now())
+
+  item         Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
 }
