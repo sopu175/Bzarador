@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChangeBadge } from "./change-badge";
 import { Badge } from "@/components/ui/badge";
+import { ItemDetailsModal } from "./item-details-modal";
 
 type PriceRow = {
   item: {
@@ -67,6 +68,7 @@ export function MarketsTab() {
   const districts = marketsData?.districts ?? [];
   const [district, setDistrict] = useState<string>("all");
   const [marketId, setMarketId] = useState<string>("");
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
   const availableMarkets = useMemo(() => {
     if (!marketsData) return [];
@@ -156,7 +158,12 @@ export function MarketsTab() {
             <CardTitle className="text-base">
               {currentMarket ? tr(currentMarket.nameBn, currentMarket.nameEn) : t("marketsTitle")}
             </CardTitle>
-            <Badge variant="secondary">{num(prices.length)}</Badge>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground hidden sm:inline">
+                সকল বাজারে দাম দেখতে পণ্যে ক্লিক করুন
+              </span>
+              <Badge variant="secondary">{num(prices.length)}</Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -171,39 +178,49 @@ export function MarketsTab() {
               {t("noResults")}
             </div>
           ) : (
-            <ScrollArea className="max-h-[640px]">
-              <div className="divide-y divide-border">
-                {prices.map((p) => (
+            <div className="divide-y divide-border">
+              {prices.map((p) => (
                   <div
                     key={p.item.id}
-                    className="flex items-center gap-3 p-3.5 hover:bg-secondary/50 transition-colors"
+                    onClick={() => setSelectedItemId(p.item.id)}
+                    className="flex items-center gap-3 p-3.5 hover:bg-secondary/60 transition-colors cursor-pointer group"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-xl">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-xl group-hover:scale-105 transition-transform">
                       {p.item.emoji}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="font-medium truncate">
+                      <div className="font-medium truncate group-hover:text-primary transition-colors">
                         {tr(p.item.nameBn, p.item.nameEn)}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {t("perUnit")} {tUnit(p.item.unit)} · {num(p.reportCount)} {t("reportCount")}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-bold text-lg leading-none">
-                        {p.avgToday != null ? `${num(p.avgToday)}৳` : "—"}
+                    <div className="text-right flex items-center gap-2">
+                      <div>
+                        <div className="font-bold text-lg leading-none">
+                          {p.avgToday != null ? `${num(p.avgToday)}৳` : "—"}
+                        </div>
+                        <div className="mt-1.5">
+                          <ChangeBadge change={p.change} changePct={p.changePct} showAbs />
+                        </div>
                       </div>
-                      <div className="mt-1.5">
-                        <ChangeBadge change={p.change} changePct={p.changePct} showAbs />
-                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0 ml-1 hidden sm:block" />
                     </div>
                   </div>
                 ))}
               </div>
-            </ScrollArea>
           )}
         </CardContent>
       </Card>
+
+      <ItemDetailsModal
+        itemId={selectedItemId}
+        open={!!selectedItemId}
+        onOpenChange={(open) => {
+          if (!open) setSelectedItemId(null);
+        }}
+      />
     </div>
   );
 }

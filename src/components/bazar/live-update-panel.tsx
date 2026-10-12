@@ -2,7 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RefreshCw, Globe, Loader2, Clock, Radio } from "lucide-react";
-import { useT, useLang } from "@/lib/i18n";
+import { useT, useLang, useNum } from "@/lib/i18n";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ async function fetchStatus(): Promise<LiveStatus> {
 
 export function LiveUpdatePanel() {
   const t = useT();
+  const num = useNum();
   const lang = useLang((s) => s.lang);
   const qc = useQueryClient();
   const [fetching, setFetching] = useState(false);
@@ -122,11 +123,32 @@ export function LiveUpdatePanel() {
             {sources.length > 0 && (
               <span className="inline-flex items-center gap-1.5 flex-wrap">
                 {t("liveSources")}:
-                {sources.map((s) => (
-                  <Badge key={s} variant="secondary" className="text-[10px] py-0">
-                    {s}
-                  </Badge>
-                ))}
+                {sources.map((s) => {
+                  let href = "https://www.google.com/search?q=" + encodeURIComponent(s + " বাজার দর বাংলাদেশ");
+                  const sLower = s.toLowerCase();
+                  if (sLower.includes("tbs") || sLower.includes("business standard")) href = "https://www.tbsnews.net";
+                  else if (sLower.includes("dhaka tribune")) href = "https://www.dhakatribune.com";
+                  else if (sLower.includes("daily star")) href = "https://www.thedailystar.net";
+                  else if (sLower.includes("prothom alo")) href = "https://www.prothomalo.com";
+                  else if (sLower.includes("ittefaq")) href = "https://www.ittefaq.com.bd";
+                  else if (sLower.includes("jago news")) href = "https://www.jagonews24.com";
+                  else if (sLower.includes("dhaka post")) href = "https://www.dhakapost.com";
+                  else if (sLower.includes("dam") || sLower.includes("কৃষি বিপণন")) href = "http://www.dam.gov.bd";
+
+                  return (
+                    <a
+                      key={s}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
+                    >
+                      <Badge variant="secondary" className="text-[10px] py-0 cursor-pointer hover:bg-primary/15 hover:text-primary">
+                        {s} ↗
+                      </Badge>
+                    </a>
+                  );
+                })}
               </span>
             )}
             {last.status === "error" && (
@@ -137,10 +159,17 @@ export function LiveUpdatePanel() {
           <span>{t("liveNever")}</span>
         )}
         {status && status.todayLiveReports > 0 && (
-          <span className="ml-auto inline-flex items-center gap-1">
-            <Radio className="h-3 w-3 text-primary" />
-            <span className="font-semibold text-primary">{status.todayLiveReports}</span>{" "}
-            {t("liveReportsToday")}
+          <span
+            className="ml-auto inline-flex items-center gap-1.5 bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20"
+            title={
+              lang === "bn"
+                ? "দেশজুড়ে ১১টি বাজারে ৫৪টি পণ্যের জন্য আজ মোট সংগৃহীত লাইভ দামের রিপোর্ট সংখ্যা"
+                : "Total live price entries collected today across 11 markets for all 54 items"
+            }
+          >
+            <Radio className="h-3 w-3 text-primary animate-pulse" />
+            <span className="font-semibold text-primary">{num(status.todayLiveReports)}</span>{" "}
+            <span>{t("liveReportsToday")}</span>
           </span>
         )}
       </div>

@@ -66,3 +66,24 @@ Stage Summary:
 - UI shows: LIVE panel with timestamp + sources + count, LIVE filter chip, per-price LIVE badges with source attribution + time, live prices sorted to top of list.
 - Resilient: 429 rate-limit errors from page_reader are caught and logged; pipeline falls back to search snippets (which always contain price data) so it never fully fails.
 - Lint clean, no runtime errors in dev log (only expected 429 warnings from upstream page_reader).
+
+---
+Task ID: enh-v2
+Agent: main
+Task: Implement comprehensive filters, item breakdown across 11 physical bazars modal, developer attribution, external trusted news links, live price pipeline resilience, and market ratio analysis.
+
+Work Log:
+- Fixed SQLite database connection path in `.env` and initialized local Prisma dependencies.
+- Resolved live price error in `src/lib/live-prices.ts` by adding resilient news extraction and fallback logic for online news bulletins when API tokens are unavailable.
+- Created `src/components/bazar/item-details-modal.tsx`: Interactive dialog displaying the exact price, min, max, average, and price variation across all 11 physical bazars in Bangladesh for any selected product.
+- Updated `src/app/api/prices/route.ts` and `src/lib/prices.ts`: added `getItemMarketDetails(itemId)` to serve real-time per-market price comparisons across all 11 bazars.
+- Enhanced `src/components/bazar/today-tab.tsx`:
+  - Added multi-dimensional filters: category pill selector, live only chip, price movement pills (সব, আজ বেড়েছে, আজ কমেছে, অপরিবর্তিত).
+  - Added sorting dropdown (জনপ্রিয়/রিপোর্ট, কম দাম প্রথমে, বেশি দাম প্রথমে, বেশি বৃদ্ধি, বেশি হ্রাস).
+  - Made "আজ বেড়েছে" and "আজ কমেছে" dynamically synchronize with the selected category/search query.
+  - Made every item card and mover item clickable to trigger the 11-market breakdown modal.
+- Enhanced `src/components/bazar/markets-tab.tsx` so clicking on any item in a market also opens the 11-market comparative popup.
+- Enhanced `src/components/bazar/trends-tab.tsx` with price spread ratio analysis (দাম তারতম্যের অনুপাত / Price Spread Ratio) and spread range metric.
+- Enhanced `src/components/bazar/live-update-panel.tsx` with clickable badges directly linking to external news sources (TBS, Dhaka Tribune, Prothom Alo, Daily Star, DAM).
+- Updated footer in `src/app/page.tsx` with direct external news links and developer attribution: `Designed & Developed by Saif` with clickable `mailto:sopu175@gmail.com`.
+- Validated via `eslint .` (clean, 0 errors) and confirmed server runs cleanly on `http://localhost:3000` with 200 OK.

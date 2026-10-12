@@ -22,6 +22,7 @@ model Item {
 
   reports   PriceReport[]
   alerts    PriceAlert[]
+  votes     PriceVote[]
 }
 
 // A physical kitchen market (bazar) in a district/upazila
@@ -65,7 +66,8 @@ model PriceAlert {
   marketId     String?
   targetPrice  Float
   direction    String   // below | above
-  phone        String
+  email        String?  // user email to notify
+  phone        String?
   createdAt    DateTime @default(now())
 
   item         Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
@@ -80,4 +82,28 @@ model LiveFetchLog {
   itemsFetched Int      @default(0)
   sourcesUsed  String   // comma-joined source names
   error        String?
+}
+
+// User Feedback submissions
+model Feedback {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  rating    Int      @default(5) // 1 to 5 stars
+  category  String   @default("general") // general | price_accuracy | feature_request | bug
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+// User price accuracy voting (accurate vs too high / too low)
+model PriceVote {
+  id        String   @id @default(cuid())
+  itemId    String
+  voteType  String   // accurate | high | cheap
+  voterIp   String?
+  createdAt DateTime @default(now())
+
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, voteType])
 }

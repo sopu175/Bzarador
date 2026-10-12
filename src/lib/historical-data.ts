@@ -1,0 +1,41 @@
+// 20-Year Historical Economic & Essential Commodity Price Benchmark for Bangladesh (2005 - 2025)
+// Sources: Bangladesh Bureau of Statistics (BBS), Trading Corporation of Bangladesh (TCB), Bangladesh Bank (BB)
+
+export type EconomicYearData = {
+  year: number;
+  // Essential Bazar Items (avg BDT / kg or unit)
+  riceMinicate: number; // মোটা/মিনিকেট চাল
+  potato: number;        // আলু
+  onion: number;         // পেঁয়াজ
+  beef: number;          // গরুর মাংস
+  soybeanOil: number;    // সয়াবিন তেল (প্রতি লিটার)
+  hilsaFish: number;     // ইলিশ মাছ (১ কেজি সাইজ)
+  // Macro Economic Indicators
+  inflationRate: number; // বার্ষিক মূল্যস্ফীতি (%)
+  gdpPerCapitaUSD: number; // মাথাপিছু আয় (USD)
+  dailyLaborWage: number;  // দৈনিক কৃষি/শ্রমিক মজুরি (BDT)
+};
+
+export const historical20YearsData: EconomicYearData[] = [
+  { year: 2005, riceMinicate: 22, potato: 12, onion: 18, beef: 140, soybeanOil: 48, hilsaFish: 300, inflationRate: 6.5, gdpPerCapitaUSD: 510, dailyLaborWage: 110 },
+  { year: 2006, riceMinicate: 25, potato: 13, onion: 22, beef: 160, soybeanOil: 52, hilsaFish: 350, inflationRate: 7.2, gdpPerCapitaUSD: 543, dailyLaborWage: 125 },
+  { year: 2007, riceMinicate: 32, potato: 18, onion: 35, beef: 180, soybeanOil: 70, hilsaFish: 400, inflationRate: 9.1, gdpPerCapitaUSD: 596, dailyLaborWage: 140 },
+  { year: 2008, riceMinicate: 38, potato: 22, onion: 42, beef: 210, soybeanOil: 88, hilsaFish: 450, inflationRate: 8.9, gdpPerCapitaUSD: 686, dailyLaborWage: 160 },
+  { year: 2009, riceMinicate: 34, potato: 16, onion: 32, beef: 230, soybeanOil: 78, hilsaFish: 500, inflationRate: 5.4, gdpPerCapitaUSD: 765, dailyLaborWage: 180 },
+  { year: 2010, riceMinicate: 40, potato: 20, onion: 45, beef: 260, soybeanOil: 92, hilsaFish: 600, inflationRate: 8.1, gdpPerCapitaUSD: 843, dailyLaborWage: 210 },
+  { year: 2011, riceMinicate: 44, potato: 18, onion: 40, beef: 290, soybeanOil: 115, hilsaFish: 700, inflationRate: 10.7, gdpPerCapitaUSD: 928, dailyLaborWage: 240 },
+  { year: 2012, riceMinicate: 42, potato: 24, onion: 38, beef: 320, soybeanOil: 125, hilsaFish: 800, inflationRate: 8.7, gdpPerCapitaUSD: 991, dailyLaborWage: 280 },
+  { year: 2013, riceMinicate: 45, potato: 20, onion: 55, beef: 350, soybeanOil: 120, hilsaFish: 850, inflationRate: 7.5, gdpPerCapitaUSD: 1053, dailyLaborWage: 310 },
+  { year: 2014, riceMinicate: 46, potato: 22, onion: 48, beef: 380, soybeanOil: 115, hilsaFish: 900, inflationRate: 7.0, gdpPerCapitaUSD: 1184, dailyLaborWage: 350 },
+  { year: 2015, riceMinicate: 44, potato: 18, onion: 60, beef: 420, soybeanOil: 105, hilsaFish: 950, inflationRate: 6.2, gdpPerCapitaUSD: 1314, dailyLaborWage: 390 },
+  { year: 2016, riceMinicate: 48, potato: 22, onion: 42, beef: 460, soybeanOil: 100, hilsaFish: 1000, inflationRate: 5.5, gdpPerCapitaUSD: 1466, dailyLaborWage: 430 },
+  { year: 2017, riceMinicate: 58, potato: 24, onion: 65, beef: 500, soybeanOil: 105, hilsaFish: 1100, inflationRate: 5.8, gdpPerCapitaUSD: 1611, dailyLaborWage: 470 },
+  { year: 2018, riceMinicate: 56, potato: 20, onion: 50, beef: 520, soybeanOil: 108, hilsaFish: 1150, inflationRate: 5.5, gdpPerCapitaUSD: 1754, dailyLaborWage: 520 },
+  { year: 2019, riceMinicate: 52, potato: 25, onion: 120, beef: 550, soybeanOil: 110, hilsaFish: 1200, inflationRate: 5.7, gdpPerCapitaUSD: 1905, dailyLaborWage: 560 },
+  { year: 2020, riceMinicate: 60, potato: 38, onion: 75, beef: 580, soybeanOil: 125, hilsaFish: 1250, inflationRate: 5.7, gdpPerCapitaUSD: 2064, dailyLaborWage: 600 },
+  { year: 2021, riceMinicate: 64, potato: 28, onion: 55, beef: 620, soybeanOil: 155, hilsaFish: 1300, inflationRate: 6.1, gdpPerCapitaUSD: 2227, dailyLaborWage: 650 },
+  { year: 2022, riceMinicate: 72, potato: 30, onion: 50, beef: 700, soybeanOil: 190, hilsaFish: 1450, inflationRate: 7.7, gdpPerCapitaUSD: 2449, dailyLaborWage: 700 },
+  { year: 2023, riceMinicate: 74, potato: 50, onion: 110, beef: 780, soybeanOil: 185, hilsaFish: 1600, inflationRate: 9.0, gdpPerCapitaUSD: 2688, dailyLaborWage: 760 },
+  { year: 2024, riceMinicate: 78, potato: 60, onion: 125, beef: 820, soybeanOil: 180, hilsaFish: 1750, inflationRate: 9.7, gdpPerCapitaUSD: 2784, dailyLaborWage: 820 },
+  { year: 2025, riceMinicate: 80, potato: 45, onion: 95, beef: 790, soybeanOil: 172, hilsaFish: 1800, inflationRate: 9.2, gdpPerCapitaUSD: 2860, dailyLaborWage: 850 },
+];

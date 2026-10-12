@@ -29,6 +29,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PriceAccuracyVoting } from "./price-accuracy-voting";
+import { HistoricalEconomicGraph } from "./historical-economic-graph";
 
 type Item = {
   id: string;
@@ -57,8 +59,8 @@ async function fetchMarkets(): Promise<{ markets: Market[] }> {
   if (!res.ok) throw new Error("Failed to load markets");
   return res.json();
 }
-async function fetchTrend(itemId: string, marketId?: string): Promise<{ item: Item | null; days: Day[] }> {
-  const url = `/api/prices?trend=1&itemId=${itemId}${marketId ? `&marketId=${marketId}` : ""}`;
+async function fetchTrend(itemId: string, marketId?: string, timeframe: string = "7d"): Promise<{ item: Item | null; days: Day[] }> {
+  const url = `/api/prices?trend=1&itemId=${itemId}&timeframe=${timeframe}${marketId ? `&marketId=${marketId}` : ""}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load trend");
   return res.json();
@@ -78,6 +80,7 @@ export function TrendsTab() {
 
   const [itemId, setItemId] = useState("");
   const [marketId, setMarketId] = useState<string>("all");
+  const [timeframe, setTimeframe] = useState<"7d" | "30d" | "1y">("7d");
   const [fetchingItem, setFetchingItem] = useState(false);
 
   async function onFetchItemLive() {
@@ -108,8 +111,8 @@ export function TrendsTab() {
   const effectiveItemId = itemId || firstItemId;
 
   const { data: trendData, isLoading: trendLoading } = useQuery({
-    queryKey: ["trend", effectiveItemId, marketId],
-    queryFn: () => fetchTrend(effectiveItemId, marketId === "all" ? undefined : marketId),
+    queryKey: ["trend", effectiveItemId, marketId, timeframe],
+    queryFn: () => fetchTrend(effectiveItemId, marketId === "all" ? undefined : marketId, timeframe),
     enabled: !!effectiveItemId,
   });
 
@@ -122,10 +125,17 @@ export function TrendsTab() {
   const weekAgoAvg = days[0]?.avg ?? 0;
   const weekChangePct = weekAgoAvg > 0 ? Math.round(((todayAvg - weekAgoAvg) / weekAgoAvg) * 1000) / 10 : 0;
 
-  // Build chart data with localized day labels
+  // Build chart data with localized day/month labels
   const chartData = days.map((d) => {
-    const dt = new Date(d.date);
-    const dayName = dt.toLocaleDateString(lang === "bn" ? "bn-BD" : "en-US", { weekday: "short" });
+    let dayName = d.date;
+    if (timeframe === "1y") {
+      const [y, m] = d.date.split("-");
+      const dt = new Date(parseInt(y), parseInt(m) - 1, 1);
+      dayName = dt.toLocaleDateString(lang === "bn" ? "bn-BD" : "en-US", { month: "short" });
+    } else {
+      const dt = new Date(d.date);
+      dayName = dt.toLocaleDateString(lang === "bn" ? "bn-BD" : "en-US", { weekday: "short" });
+    }
     return {
       date: d.date,
       day: dayName,
@@ -185,6 +195,39 @@ export function TrendsTab() {
               </Select>
             </div>
           </div>
+
+          {/* Timeframe comparison selector */}
+          <div className="pt-2 border-t border-border/40 flex items-center justify-between gap-2 flex-wrap">
+            <span className="text-xs text-muted-foreground font-medium">
+              {lang === "bn" ? "সময়কাল বিশ্লেষণ:" : "Comparison Timeframe:"}
+            </span>
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant={timeframe === "7d" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTimeframe("7d")}
+                className="h-8 text-xs px-3"
+              >
+                {t("timeframe7d")}
+              </Button>
+              <Button
+                variant={timeframe === "30d" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTimeframe("30d")}
+                className="h-8 text-xs px-3"
+              >
+                {t("timeframe30d")}
+              </Button>
+              <Button
+                variant={timeframe === "1y" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTimeframe("1y")}
+                className="h-8 text-xs px-3"
+              >
+                {t("timeframe1y")}
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -219,8 +262,8 @@ export function TrendsTab() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Summary stats */}
-            <div className="grid grid-cols-3 gap-2">
+            {/* Summary stats & Ratio analysis */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <StatBox
                 label={t("trendsAvg")}
                 value={todayAvg ? `${num(todayAvg)}৳` : "—"}
@@ -235,6 +278,12 @@ export function TrendsTab() {
                 label={t("trendsWeekLow")}
                 value={weekLow ? `${num(weekLow)}৳` : "—"}
                 icon={<TrendingDown className="h-3.5 w-3.5 text-green-600" />}
+              />
+              <StatBox
+                label={lang === "bn" ? "দামের অনুপাত / তারতম্য" : "Price Spread Ratio"}
+                value={weekLow > 0 ? `${num(Math.round(((weekHigh - weekLow) / weekLow) * 100))}%` : "—"}
+                subtext={weekHigh && weekLow ? `±${num(weekHigh - weekLow)}৳ ব্যবধান` : undefined}
+                icon={<Activity className="h-3.5 w-3.5 text-amber-500" />}
               />
             </div>
 
@@ -320,9 +369,19 @@ export function TrendsTab() {
                 </Badge>
               </div>
             )}
+
+            {/* Community Voting */}
+            <PriceAccuracyVoting
+              itemId={item.id}
+              itemNameBn={item.nameBn}
+              itemNameEn={item.nameEn}
+            />
           </CardContent>
         </Card>
       )}
+
+      {/* 20-Year Historical Economic & Commodity Benchmark */}
+      <HistoricalEconomicGraph />
     </div>
   );
 }
@@ -330,18 +389,20 @@ export function TrendsTab() {
 function StatBox({
   label,
   value,
+  subtext,
   icon,
   accent,
 }: {
   label: string;
   value: string;
+  subtext?: string;
   icon?: React.ReactNode;
   accent?: "primary";
 }) {
   return (
     <div
       className={
-        "rounded-xl p-3 text-center " +
+        "rounded-xl p-3 text-center flex flex-col justify-center " +
         (accent === "primary"
           ? "bg-primary/10 text-primary"
           : "bg-secondary text-foreground")
@@ -352,6 +413,7 @@ function StatBox({
         {label}
       </div>
       <div className="mt-0.5 font-bold text-base">{value}</div>
+      {subtext && <div className="text-[9px] opacity-75 mt-0.5">{subtext}</div>}
     </div>
   );
 }

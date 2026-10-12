@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, BellRing, Loader2, Search, Plus, TrendingDown, TrendingUp, Phone } from "lucide-react";
+import { Bell, BellRing, Loader2, Search, Plus, TrendingDown, TrendingUp, Phone, Mail, CheckCircle2 } from "lucide-react";
 import { useT, useTr, useTCat, useNum, useLang } from "@/lib/i18n";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -77,16 +77,20 @@ export function AlertsTab() {
   const [itemId, setItemId] = useState("");
   const [direction, setDirection] = useState<"below" | "above">("below");
   const [targetPrice, setTargetPrice] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [findPhone, setFindPhone] = useState("");
-  const [searchedPhone, setSearchedPhone] = useState("");
+  const [findEmail, setFindEmail] = useState("");
+  const [searchedEmail, setSearchedEmail] = useState("");
 
   const { data: myAlertsData, isLoading: myAlertsLoading, isFetching: myAlertsFetching } = useQuery({
-    queryKey: ["alerts", searchedPhone],
-    queryFn: () => fetchAlerts(searchedPhone),
-    enabled: !!searchedPhone,
+    queryKey: ["alerts", searchedEmail],
+    queryFn: async () => {
+      const res = await fetch(`/api/alerts?email=${encodeURIComponent(searchedEmail)}`);
+      if (!res.ok) throw new Error("Failed to load alerts");
+      return res.json() as Promise<{ alerts: AlertRow[] }>;
+    },
+    enabled: !!searchedEmail,
   });
 
   const myAlerts = myAlertsData?.alerts ?? [];
@@ -97,12 +101,12 @@ export function AlertsTab() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!itemId || !targetPrice || !phone) {
+    if (!itemId || !targetPrice || !email.trim()) {
       toast.error(t("alertsError"));
       return;
     }
     const target = parseFloat(targetPrice);
-    if (isNaN(target) || target <= 0 || phone.length < 6) {
+    if (isNaN(target) || target <= 0 || !email.includes("@")) {
       toast.error(t("alertsError"));
       return;
     }
@@ -115,15 +119,21 @@ export function AlertsTab() {
           itemId,
           targetPrice: target,
           direction,
-          phone,
+          email: email.trim().toLowerCase(),
         }),
       });
-      if (!res.ok) throw new Error("submit failed");
-      toast.success(t("alertsSuccess"));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "submit failed");
+      
+      toast.success(t("alertsSuccess"), {
+        description: lang === "bn"
+          ? `${email} ঠিকানায় নিশ্চিতকরণ বার্তা পাঠানো হয়েছে।`
+          : `Confirmation email sent to ${email}.`,
+      });
       setTargetPrice("");
-      // If the same phone was searched, refresh
-      if (searchedPhone === phone) {
-        qc.invalidateQueries({ queryKey: ["alerts", phone] });
+      // If user is searching their own email, refresh
+      if (searchedEmail.toLowerCase() === email.trim().toLowerCase()) {
+        qc.invalidateQueries({ queryKey: ["alerts", searchedEmail] });
       }
     } catch {
       toast.error(t("alertsError"));
@@ -133,22 +143,41 @@ export function AlertsTab() {
   }
 
   function onFind() {
-    const p = findPhone.trim();
-    if (p.length < 6) {
-      toast.error(t("alertsError"));
+    const p = findEmail.trim().toLowerCase();
+    if (!p || !p.includes("@")) {
+      toast.error(lang === "bn" ? "অনুগ্রহ করে একটি সঠিক ইমেইল ঠিকানা দিন।" : "Please enter a valid email address.");
       return;
     }
-    setSearchedPhone(p);
+    setSearchedEmail(p);
   }
 
   return (
     <div className="space-y-4">
+      {/* How it works guidance card */}
+      <div className="rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 via-card to-accent/10 p-4">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs">
+            <BellRing className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-foreground">
+              {lang === "bn" ? "বাজার দর সতর্কতা কিভাবে কাজ করে?" : "How Market Price Alerts Work"}
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              {lang === "bn"
+                ? "আপনার কাঙ্ক্ষিত পণ্য এবং লক্ষ্য মূল্য সেট করুন (যেমন: আলু ৩৫ টাকার নিচে নামলে বা পেঁয়াজ ৭০ টাকার উপরে উঠলে)। দেশের যেকোনো বাজারে দাম নির্ধারিত মাত্রায় পৌঁছালে আপনাকে সতর্কবার্তা পাঠানো হবে।"
+                : "Select an item and set your desired target threshold (e.g. notify when Potato drops below 35 BDT). You will be notified when real market prices match your preference."}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Create alert form */}
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <BellRing className="h-5 w-5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Plus className="h-4 w-4" />
             </div>
             <div>
               <CardTitle className="text-base">{t("alertsTitle")}</CardTitle>
@@ -261,30 +290,35 @@ export function AlertsTab() {
               </div>
             </div>
 
-            {/* Phone */}
+            {/* Email */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-muted-foreground" htmlFor="phone">
-                {t("alertsPhone")} <span className="text-destructive">*</span>
+              <Label className="text-xs font-medium text-muted-foreground" htmlFor="email">
+                {lang === "bn" ? "আপনার ইমেইল ঠিকানা (যেখানে নোটিফিকেশন যাবে)" : "Your Email Address"} <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="phone"
-                  type="tel"
-                  inputMode="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="01XXXXXXXXX"
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="yourname@gmail.com"
                   className="h-11 bg-card pl-9"
-                  maxLength={20}
+                  required
                 />
               </div>
+              <p className="text-[11px] text-muted-foreground">
+                {lang === "bn"
+                  ? "সতর্কতা সেট করার সাথে সাথে একটি নিশ্চিতকরণ ইমেইল পাঠানো হবে।"
+                  : "A confirmation email will be dispatched immediately."}
+              </p>
             </div>
 
             <Button
               type="submit"
-              disabled={submitting || !itemId || !targetPrice || !phone}
-              className="w-full h-11 text-base font-semibold"
+              disabled={submitting || !itemId || !targetPrice || !email}
+              className="w-full h-11 text-base font-semibold cursor-pointer"
             >
               {submitting ? (
                 <>
@@ -313,25 +347,24 @@ export function AlertsTab() {
         <CardContent className="space-y-3">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                type="tel"
-                inputMode="tel"
-                value={findPhone}
-                onChange={(e) => setFindPhone(e.target.value)}
-                placeholder="01XXXXXXXXX"
+                type="email"
+                inputMode="email"
+                value={findEmail}
+                onChange={(e) => setFindEmail(e.target.value)}
+                placeholder="yourname@gmail.com"
                 className="h-11 bg-card pl-9"
-                maxLength={20}
               />
             </div>
-            <Button type="button" onClick={onFind} className="h-11" disabled={!findPhone.trim()}>
+            <Button type="button" onClick={onFind} className="h-11 cursor-pointer" disabled={!findEmail.trim()}>
               <Search className="h-4 w-4" />
               <span className="sm:hidden">{t("alertsFindBtn")}</span>
               <span className="hidden sm:inline">{t("alertsFindBtn")}</span>
             </Button>
           </div>
 
-          {!searchedPhone ? (
+          {!searchedEmail ? (
             <div className="py-6 text-center text-xs text-muted-foreground">{t("alertsFind")}</div>
           ) : myAlertsLoading || myAlertsFetching ? (
             <div className="space-y-2">

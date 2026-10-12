@@ -1,19 +1,28 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { getLatestPrices, getPriceTrend } from "@/lib/prices";
+import { getLatestPrices, getPriceTrend, getItemMarketDetails } from "@/lib/prices";
 
 // GET /api/prices
 //   ?marketId=xxx          -> latest prices at one market
 //   ?trend=1&itemId=xxx    -> 7-day trend for an item (optionally at a market)
+//   ?details=1&itemId=xxx  -> per-market breakdown across all 11 markets for an item
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const marketId = searchParams.get("marketId") || undefined;
   const trend = searchParams.get("trend");
+  const details = searchParams.get("details");
   const itemId = searchParams.get("itemId") || undefined;
+  const timeframe = (searchParams.get("timeframe") as "7d" | "30d" | "1y") || "7d";
+
+  if (details === "1" && itemId) {
+    const data = await getItemMarketDetails(itemId);
+    if (!data) return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    return NextResponse.json(data);
+  }
 
   if (trend === "1" && itemId) {
-    const days = await getPriceTrend(itemId, marketId || undefined);
+    const days = await getPriceTrend(itemId, marketId || undefined, timeframe);
     const item = await db.item.findUnique({ where: { id: itemId } });
     return NextResponse.json({ item, days });
   }
