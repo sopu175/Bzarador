@@ -49,10 +49,10 @@ function AppShell() {
   return (
     <div className="min-h-screen flex flex-col market-bg">
       <Header />
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
           {/* Left Column: Core interactive bazar commodities & user actions */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-5">
+          <div className="lg:col-span-7 xl:col-span-8 space-y-4 sm:space-y-5">
             <Hero />
             <LocationBar />
             <LiveUpdatePanel />
@@ -105,7 +105,7 @@ function AppShell() {
           </div>
 
           {/* Right Column: 20-Year Historical Economic Benchmark & Community Live Feed */}
-          <div className="lg:col-span-5 xl:col-span-4 space-y-5 lg:sticky lg:top-20">
+          <div className="lg:col-span-5 xl:col-span-4 space-y-4 sm:space-y-5 lg:sticky lg:top-18">
             <HistoricalEconomicGraph />
             <SidebarCommunityPanel />
           </div>
@@ -167,8 +167,8 @@ function Hero() {
 
   return (
     <section className="space-y-4">
-      <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/8 via-card to-accent/30">
-        <CardContent className="p-5 sm:p-6">
+      <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/8 via-card to-accent/30 shadow-xs">
+        <CardContent className="p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-2.5 py-1 text-xs font-semibold">
               <span className="relative flex h-2 w-2">
@@ -194,12 +194,12 @@ function Hero() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
             {t("appName")} <span className="text-primary">🇧🇩</span>
           </h1>
-          <p className="mt-1.5 text-sm text-muted-foreground max-w-md">
+          <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground max-w-md">
             {t("heroSubtitle")}
           </p>
 
-          {/* Stats grid — each stat tile is clickable to its dedicated page */}
-          <div className="mt-4 grid grid-cols-4 gap-2">
+          {/* Stats grid — 2 columns on small screens, 4 columns on tablet and above */}
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
             <StatTile
               href="/items"
               icon={<PackageSearch className="h-3.5 w-3.5" />}

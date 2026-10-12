@@ -127,12 +127,12 @@ export function LocationBar({ onMarketFilter }: { onMarketFilter?: (marketId: st
         </div>
 
         {/* Right: Quick Location changer & Refresh GPS */}
-        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
           <Select
             value={location?.marketId ?? MARKET_COORDINATES[0].id}
             onValueChange={handleManualSelect}
           >
-            <SelectTrigger className="h-8 text-xs bg-background/90 w-[165px] border-border/70">
+            <SelectTrigger className="h-8 text-xs bg-background/90 flex-1 sm:w-[165px] border-border/70">
               <SelectValue placeholder={lang === "bn" ? "অন্য বাজার বাছুন" : "Switch Market"} />
             </SelectTrigger>
             <SelectContent>
