@@ -1,1 +1,27 @@
-bun x lint-staged
+#!/bin/sh
+
+# Prevent direct commits to production/main branch
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
+  echo "❌ [husky:pre-commit] Direct commits to '$current_branch' are prohibited!"
+  echo "   ↳ Professional Git Flow: Please work on 'development' or feature branches (e.g. 'feature/*', 'fix/*')."
+  echo "   ↳ Merge your branch into '$current_branch' only after review & tests pass."
+  exit 1
+fi
+
+echo "🔍 [husky:pre-commit] Checking staged files on branch '$current_branch'..."
+
+# Run lint-staged (strict ESLint --max-warnings=0 and Prettier write)
+bun x lint-staged || {
+  echo "❌ [husky:pre-commit] Lint or Formatting errors detected! Commit rejected."
+  exit 1
+}
+
+# Run TypeScript compile check
+bun x tsc --noEmit || {
+  echo "❌ [husky:pre-commit] TypeScript type errors detected! Commit rejected."
+  exit 1
+}
+
+echo "✅ [husky:pre-commit] Zero errors & warnings. Proceeding with commit."

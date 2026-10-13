@@ -183,6 +183,61 @@ _(স্বয়ংক্রিয়ভাবে Vercel থেকে ডেট
 
 ---
 
+## 🛡️ Professional Git Workflow & Quality Gates (Husky)
+
+প্রজেক্টে কোডের মান, স্ট্যাবিলিটি ও ক্লিন হিস্ট্রি নিশ্চিত করতে কঠোর অটোমেটিক **Husky Git Hooks** কনফিগার করা আছে। কোনো অবস্থাতেই ফরম্যাটিং বা লিন্ট ত্রুটিযুক্ত কোড কমিট বা পুশ করা সম্ভব নয়:
+
+### ১. ব্রাঞ্চিং নীতিমালা (Branching Rules):
+
+- **`main` (Production Branch)**: সরাসরি `main` ব্রাঞ্চে কোনো কমিট গ্রহণযোগ্য নয় (`pre-commit` হুক দ্বারা প্রটেক্টেড)। প্রোডাকশন কোড সবসময় টেস্টেড ও ভেরিফাইড হতে হবে।
+- **`development` (Staging / Integration Branch)**: সকল নতুন ফিচার ও ফিক্স প্রথমে `development` ব্রাঞ্চে কাজ করতে হবে।
+- **Feature Branches (`feat/*`, `fix/*`, `chore/*`)**: বড় ফিচারের ক্ষেত্রে আলাদা ব্রাঞ্চ তৈরি করে কাজ সম্পন্ন হলে `development` ব্রাঞ্চে মার্জ করুন, এবং সেখান থেকে `main` এ মার্জ করুন।
+
+```bash
+# নতুন কাজে সুইচ করুন development ব্রাঞ্চে:
+git checkout development
+
+# অথবা নতুন ফিচার ব্রাঞ্চ বানান:
+git checkout -b feat/new-market-feature
+```
+
+### ২. কমিট মেসেজ কনভেনশন (Commitlint Rules):
+
+কমিট মেসেজ অবশ্যই **Conventional Commits** ফরম্যাট মেনে হতে হবে, অন্যথায় `commit-msg` হুক কমিট প্রত্যাখ্যান করবে:
+
+| টাইপ        | ব্যবহার                          | উদাহরণ                                                   |
+| ----------- | -------------------------------- | -------------------------------------------------------- |
+| `feat:`     | নতুন কোনো ফিচার যোগ করা          | `git commit -m "feat: add real-time price notification"` |
+| `fix:`      | কোনো বাগ বা এরর ফিক্স করা        | `git commit -m "fix: resolve date boundary calculation"` |
+| `docs:`     | ডকুমেন্টেশন আপডেট                | `git commit -m "docs: update readme with husky guides"`  |
+| `style:`    | কোড ফরম্যাটিং বা স্টাইল পরিবর্তন | `git commit -m "style: format components with prettier"` |
+| `refactor:` | লজিক বা স্ট্রাকচার রিফ্যাক্টর    | `git commit -m "refactor: simplify price aggregation"`   |
+| `chore:`    | টুলিং বা ডিপেন্ডেন্সি আপডেট      | `git commit -m "chore: update dependencies"`             |
+| `ci:`       | গিট ওয়ার্কফ্লো ও হুক আপডেট      | `git commit -m "ci: enforce strict pre-push gates"`      |
+
+### ৩. প্রি-কমিট কোয়ালিটি গেট (`.husky/pre-commit`):
+
+কমিট করার সময় স্বয়ংক্রিয়ভাবে রান হয়:
+
+1. **ব্রাঞ্চ গার্ড**: `main` ব্রাঞ্চে সরাসরি কমিট ব্লক করে।
+2. **ESLint (`--max-warnings=0`)**: কোডে **০ এরর ও ০ ওয়ার্নিং** থাকলে কেবল কমিট অনুমোদন পায়।
+3. **Prettier Format**: স্টেজ করা ফাইলগুলোর ফরম্যাটিং স্বয়ংক্রিয়ভাবে ঠিক করে।
+4. **TypeScript Compile (`tsc --noEmit`)**: কোনো টাইপ এরর থাকলে কমিট বাতিল হয়।
+
+### ৪. প্রি-পুশ কোয়ালিটি গেট (`.husky/pre-push`):
+
+রিমোটে পুশ করার পূর্বে কঠোর ভ্যালিডেশন নিশ্চিত করে:
+
+```
+🔍 [pre-push] Verifying code quality before pushing...
+  ↳ 1/3 Checking code formatting (Prettier)...
+  ↳ 2/3 Checking lint rules (ESLint --max-warnings=0)...
+  ↳ 3/3 Checking TypeScript types (tsc)...
+✅ All code quality gates passed! Proceeding with git push.
+```
+
+---
+
 ## 📁 Project Directory Structure
 
 ```

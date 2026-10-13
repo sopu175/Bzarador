@@ -26,15 +26,10 @@ async function main() {
   if (fs.existsSync(dbFile)) {
     fs.copyFileSync(dbFile, snapshotFile);
     fs.copyFileSync(dbFile, latestSnapshot);
-    const sizeMb = (fs.statSync(snapshotFile).size / (1024 * 1024)).toFixed(2);
-    console.log(`[Backup] SQLite database file copied: ${snapshotFile} (${sizeMb} MB)`);
-    console.log(`[Backup] Latest pointer updated: ${latestSnapshot}`);
   } else {
-    console.warn(`[Backup] Warning: db/custom.db not found at ${dbFile}`);
   }
 
   // 2. Export JSON dump of all models
-  console.log("[Backup] Exporting data tables to JSON...");
   try {
     const [items, markets, priceReports, priceAlerts, feedbacks, priceVotes, liveFetchLogs] =
       await Promise.all([
@@ -74,12 +69,6 @@ async function main() {
 
     fs.writeFileSync(jsonFile, JSON.stringify(backupPayload, null, 2), "utf-8");
     fs.writeFileSync(latestJson, JSON.stringify(backupPayload, null, 2), "utf-8");
-
-    console.log(`[Backup] JSON data dump saved: ${jsonFile}`);
-    console.log(`[Backup] JSON latest pointer: ${latestJson}`);
-    console.log("\nSummary of backed up records:");
-    console.table(backupPayload.counts);
-    console.log(`\n Database backup completed successfully!`);
   } catch (err) {
     console.error("[Backup] Error dumping JSON tables:", err);
   } finally {
