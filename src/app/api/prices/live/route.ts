@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { refreshLivePrices } from "@/lib/live-prices";
+import { getBangladeshDateBoundaries } from "@/lib/prices";
 
 // GET /api/prices/live → return last refresh status + recent live reports
 export async function GET() {
@@ -8,8 +9,7 @@ export async function GET() {
     orderBy: { startedAt: "desc" },
   });
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const { todayStart } = getBangladeshDateBoundaries();
   const todayLiveCount = await db.priceReport.count({
     where: { sourceName: { not: null }, reportedAt: { gte: todayStart } },
   });

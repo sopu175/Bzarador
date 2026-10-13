@@ -1,5 +1,17 @@
 import { db } from "@/lib/db";
 
+// Helper to calculate Bangladesh Standard Time (UTC+6) date boundaries
+export function getBangladeshDateBoundaries() {
+  const now = new Date();
+  // BD is UTC+6
+  const bdTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+  const bdMidnightUtc = Date.UTC(bdTime.getUTCFullYear(), bdTime.getUTCMonth(), bdTime.getUTCDate());
+  // The moment BD midnight happened in UTC:
+  const todayStart = new Date(bdMidnightUtc - 6 * 60 * 60 * 1000);
+  const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
+  return { todayStart, yesterdayStart };
+}
+
 // Get latest price for each item at a market (or across all markets)
 // Returns Map-like structure: itemId -> { price, change, changePct, reportCount }
 export async function getLatestPrices(marketId?: string) {
@@ -21,24 +33,28 @@ export async function getLatestPrices(marketId?: string) {
     item: typeof reports[number]["item"];
     todayReports: typeof reports;
     yesterdayReports: typeof reports;
+    olderReports: typeof reports;
     weekReports: typeof reports;
   }>();
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const yesterdayStart = new Date(todayStart);
-  yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+  const { todayStart, yesterdayStart } = getBangladeshDateBoundaries();
 
   for (const r of reports) {
     const entry = byItem.get(r.itemId) ?? {
       item: r.item,
       todayReports: [],
       yesterdayReports: [],
+      olderReports: [],
       weekReports: [],
     };
     entry.weekReports.push(r);
-    if (r.reportedAt >= todayStart) entry.todayReports.push(r);
-    else if (r.reportedAt >= yesterdayStart) entry.yesterdayReports.push(r);
+    if (r.reportedAt >= todayStart) {
+      entry.todayReports.push(r);
+    } else if (r.reportedAt >= yesterdayStart) {
+      entry.yesterdayReports.push(r);
+    } else {
+      entry.olderReports.push(r);
+    }
     byItem.set(r.itemId, entry);
   }
 
@@ -55,20 +71,36 @@ export async function getLatestPrices(marketId?: string) {
   }> = [];
 
   for (const [, entry] of byItem) {
-    const avgToday = entry.todayReports.length
+    let avgToday = entry.todayReports.length
       ? entry.todayReports.reduce((s, r) => s + r.price, 0) / entry.todayReports.length
       : null;
-    const avgYesterday = entry.yesterdayReports.length
+    let avgYesterday = entry.yesterdayReports.length
       ? entry.yesterdayReports.reduce((s, r) => s + r.price, 0) / entry.yesterdayReports.length
       : null;
+
+    // Graceful fallback: If no reports were filed yet for "today", fallback to yesterday or latest weekly report
+    // so prices never show blank ("—") upon initial page load
+    if (avgToday == null) {
+      if (avgYesterday != null) {
+        avgToday = avgYesterday;
+        // Compare with older reports for trend if available
+        if (entry.olderReports.length > 0) {
+          avgYesterday = entry.olderReports.reduce((s, r) => s + r.price, 0) / entry.olderReports.length;
+        } else {
+          avgYesterday = null;
+        }
+      } else if (entry.weekReports.length > 0) {
+        avgToday = entry.weekReports[0].price;
+      }
+    }
 
     const change = avgToday != null && avgYesterday != null ? avgToday - avgYesterday : 0;
     const changePct = avgToday != null && avgYesterday != null && avgYesterday > 0
       ? (change / avgYesterday) * 100
       : 0;
 
-    // Find the most recent live-sourced report (today), if any
-    const liveReport = entry.todayReports.find((r) => r.sourceName);
+    // Find the most recent live-sourced report (today or from recent week), if any
+    const liveReport = entry.todayReports.find((r) => r.sourceName) || entry.weekReports.find((r) => r.sourceName);
 
     result.push({
       item: entry.item,
@@ -76,7 +108,7 @@ export async function getLatestPrices(marketId?: string) {
       avgYesterday: avgYesterday != null ? Math.round(avgYesterday) : null,
       change: Math.round(change),
       changePct: Math.round(changePct * 10) / 10,
-      reportCount: entry.todayReports.length,
+      reportCount: entry.todayReports.length || entry.weekReports.length,
       liveSource: liveReport?.sourceName ?? null,
       liveSourceUrl: liveReport?.sourceUrl ?? null,
       liveAt: liveReport?.reportedAt?.toISOString() ?? null,
@@ -202,8 +234,7 @@ export async function getItemMarketDetails(itemId: string) {
   const item = await db.item.findUnique({ where: { id: itemId } });
   if (!item) return null;
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const { todayStart } = getBangladeshDateBoundaries();
   const since7Days = new Date();
   since7Days.setDate(since7Days.getDate() - 7);
 
