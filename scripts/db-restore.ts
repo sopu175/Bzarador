@@ -35,13 +35,11 @@ async function main() {
       process.exit(1);
     }
 
-    console.log(`[Restore] Restoring data from JSON: ${jsonFile}`);
     const raw = fs.readFileSync(jsonFile, "utf-8");
     const payload = JSON.parse(raw);
     const { data } = payload;
 
     // Use transaction / sequential inserts
-    console.log("[Restore] Truncating current database tables...");
     await prisma.$transaction([
       prisma.priceReport.deleteMany(),
       prisma.priceAlert.deleteMany(),

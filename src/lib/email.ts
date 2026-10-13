@@ -1,9 +1,9 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 
 // Create reusable transporter (uses SMTP if provided in .env, otherwise creates a test Ethereal transporter or JSON fallback)
-let cachedTransporter: nodemailer.Transporter | null = null;
+let cachedTransporter: Transporter | null = null;
 
-async function getTransporter(): Promise<nodemailer.Transporter> {
+async function getTransporter(): Promise<Transporter> {
   if (cachedTransporter) return cachedTransporter;
 
   if (process.env.SMTP_HOST && process.env.SMTP_USER) {

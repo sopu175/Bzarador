@@ -1,4 +1,4 @@
-import { db } from "../src/lib/db";
+import { db } from "@/lib/db";
 
 // Realistic Bangladesh kitchen market items (Nov 2024 prices, in Taka)
 const ITEMS = [

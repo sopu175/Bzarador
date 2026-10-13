@@ -36,12 +36,12 @@ export function HistoricalEconomicGraph() {
   const d2005 = historical20YearsData[0];
   const d2025 = historical20YearsData[historical20YearsData.length - 1];
 
-  const riceMultiplier = (d2025.riceMinicate / d2005.riceMinicate).toFixed(1);
-  const beefMultiplier = (d2025.beef / d2005.beef).toFixed(1);
-  const oilMultiplier = (d2025.soybeanOil / d2005.soybeanOil).toFixed(1);
-  const hilsaMultiplier = (d2025.hilsaFish / d2005.hilsaFish).toFixed(1);
-  const wageMultiplier = (d2025.dailyLaborWage / d2005.dailyLaborWage).toFixed(1);
-  const gdpMultiplier = (d2025.gdpPerCapitaUSD / d2005.gdpPerCapitaUSD).toFixed(1);
+  const riceMultiplier = Number((d2025.riceMinicate / d2005.riceMinicate).toFixed(1));
+  const beefMultiplier = Number((d2025.beef / d2005.beef).toFixed(1));
+  const oilMultiplier = Number((d2025.soybeanOil / d2005.soybeanOil).toFixed(1));
+  const hilsaMultiplier = Number((d2025.hilsaFish / d2005.hilsaFish).toFixed(1));
+  const wageMultiplier = Number((d2025.dailyLaborWage / d2005.dailyLaborWage).toFixed(1));
+  const gdpMultiplier = Number((d2025.gdpPerCapitaUSD / d2005.gdpPerCapitaUSD).toFixed(1));
 
   return (
     <Card className="overflow-hidden border-primary/30 shadow-sm transition-all w-full">

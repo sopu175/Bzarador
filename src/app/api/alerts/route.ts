@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const item = await db.item.findUnique({ where: { id: itemId } });
   if (!item) return NextResponse.json({ error: "Item not found" }, { status: 404 });
 
-  let marketName = undefined;
+  let marketName: string | undefined = undefined;
   if (marketId) {
     const market = await db.market.findUnique({ where: { id: marketId } });
     if (market) marketName = market.nameBn;
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
   });
 
   // If email was provided, send email confirmation
-  let emailResult = null;
+  let emailResult: Awaited<ReturnType<typeof sendPriceAlertConfirmation>> | null = null;
   if (email) {
     emailResult = await sendPriceAlertConfirmation({
       toEmail: email,
