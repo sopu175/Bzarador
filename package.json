@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:backup": "bun run scripts/db-backup.ts",
-    "db:restore": "bun run scripts/db-restore.ts"
+    "db:restore": "bun run scripts/db-restore.ts",
+    "db:pull": "bun run scripts/db-pull.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

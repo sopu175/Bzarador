@@ -167,6 +167,13 @@ bun run db:restore --from-json
 bun run db:restore custom-backup-2026-10-12T11-12-25-032Z.db
 ```
 
+### Vercel থেকে সর্বশেষ লাইভ ডেটাবেজ লোকাল মেশিনে আনা (Sync from Vercel):
+Vercel প্রডাকশনে থাকা সকল নতুন প্রাইস রিপোর্ট, লাইভ আপডেট ও ফিডব্যাক লোকাল ডেটাবেজে সরাসরি সিঙ্ক করতে চালান:
+```bash
+bun run db:pull
+```
+*(স্বয়ংক্রিয়ভাবে Vercel থেকে ডেটা ফেচ করে লোকাল `db/custom.db` আপডেট করবে এবং পূর্বের লোকাল ডেটার ব্যাকআপ রাখবে)*
+
 ---
 
 ## 📁 Project Directory Structure
