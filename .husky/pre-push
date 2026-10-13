@@ -1,0 +1,24 @@
+echo "🔍 [pre-push] Verifying code quality before pushing..."
+
+# 1. Format check
+echo "  ↳ Checking code formatting (Prettier)..."
+bun run format:check || {
+  echo "❌ Prettier check failed! Run 'bun run format' to fix."
+  exit 1
+}
+
+# 2. Lint check
+echo "  ↳ Checking lint rules (ESLint)..."
+bun run lint || {
+  echo "❌ ESLint check failed! Run 'bun run lint:fix' or fix errors."
+  exit 1
+}
+
+# 3. Production build check (verifies no typescript or runtime compile bugs)
+echo "  ↳ Checking Next.js production build..."
+bun x next build || {
+  echo "❌ Next.js build failed! Push aborted."
+  exit 1
+}
+
+echo "✅ All checks passed! Proceeding with git push."
