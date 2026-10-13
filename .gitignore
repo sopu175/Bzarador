@@ -1,7 +1,10 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ==============================================================================
+# Bazar-Dor (.gitignore)
+# Keep only essential application source code & configurations
+# ==============================================================================
 
-# dependencies
-node_modules
+# Dependencies
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,55 +13,72 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# Next.js Build Outputs & Cache
+.next/
+out/
+build/
+dist/
 
-# next.js
-/.next/
-/out/
+# Environment & Secrets (Never commit credentials)
+.env
+.env*.local
+.env.production
+.env.staging
+!.env.example
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# IDE / Editors
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# debug & logs
+# Development Logs & Process IDs
+*.log
+*.log*
+*.pid
+dev.log
+dev.out.log
+server.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-*.log
-dev.log
-dev.out.log
-server.log
 
-# Database files & backups (custom.db is committed so serverless platforms like Vercel have initial data)
+# Database Snapshots & Journals
+# (Note: custom.db in root db/ is committed as initial baseline SQLite storage)
 db/*.db-journal
 db/backups/
 
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-!.env.example
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.pem
 
-# vercel & agents
+# IDE & Editor Directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.project
+.settings/
+
+# Cloud, Vercel & Container Tooling
+.vercel/
 .vercel
-.claude
-.z-ai-config
+.claude/
+.z-ai-config/
+.agents/
 /skills/
 
-# temporary
-test
-prompt
-.env*
+# Scaffold, Sandboxing & Scratch Files (Not part of Bazar-Dor core app)
+.zscripts/
+mini-services/
+examples/
+tests/
+download/
+upload/
+Caddyfile
+worklog.md
+scratch/
+test/
+prompt/
