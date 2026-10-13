@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 /**
  * Bazar-Dor: Pull Database from Vercel to Local
- * 
+ *
  * Usage:
  *   bun run db:pull
  *   bun run scripts/db-pull.ts --url https://bazar-dor-bangladesh.vercel.app --secret <your-secret>
@@ -45,7 +45,7 @@ async function main() {
   try {
     res = await fetch(exportEndpoint, {
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
   } catch (err) {

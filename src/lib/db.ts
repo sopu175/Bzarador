@@ -31,7 +31,7 @@ function resolveDatabaseUrl(): string {
 
   if (isServerless) {
     const tmpDbPath = path.join("/tmp", "custom.db");
-    
+
     // Locate packaged read-only db file
     const sourceCandidates = [
       path.resolve(process.cwd(), "db/custom.db"),

@@ -59,7 +59,11 @@ async function fetchMarkets(): Promise<{ markets: Market[] }> {
   if (!res.ok) throw new Error("Failed to load markets");
   return res.json();
 }
-async function fetchTrend(itemId: string, marketId?: string, timeframe: string = "7d"): Promise<{ item: Item | null; days: Day[] }> {
+async function fetchTrend(
+  itemId: string,
+  marketId?: string,
+  timeframe: string = "7d"
+): Promise<{ item: Item | null; days: Day[] }> {
   const url = `/api/prices?trend=1&itemId=${itemId}&timeframe=${timeframe}${marketId ? `&marketId=${marketId}` : ""}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load trend");
@@ -106,13 +110,14 @@ export function TrendsTab() {
   // Derive a default item id from the first available category
   const firstItemId =
     itemsData && itemsData.categories.length > 0
-      ? itemsData.byCategory[itemsData.categories[0]]?.[0]?.id ?? ""
+      ? (itemsData.byCategory[itemsData.categories[0]]?.[0]?.id ?? "")
       : "";
   const effectiveItemId = itemId || firstItemId;
 
   const { data: trendData, isLoading: trendLoading } = useQuery({
     queryKey: ["trend", effectiveItemId, marketId, timeframe],
-    queryFn: () => fetchTrend(effectiveItemId, marketId === "all" ? undefined : marketId, timeframe),
+    queryFn: () =>
+      fetchTrend(effectiveItemId, marketId === "all" ? undefined : marketId, timeframe),
     enabled: !!effectiveItemId,
   });
 
@@ -123,7 +128,8 @@ export function TrendsTab() {
   const weekLow = validDays.length ? Math.min(...validDays.map((d) => d.min)) : 0;
   const todayAvg = days[days.length - 1]?.avg ?? 0;
   const weekAgoAvg = days[0]?.avg ?? 0;
-  const weekChangePct = weekAgoAvg > 0 ? Math.round(((todayAvg - weekAgoAvg) / weekAgoAvg) * 1000) / 10 : 0;
+  const weekChangePct =
+    weekAgoAvg > 0 ? Math.round(((todayAvg - weekAgoAvg) / weekAgoAvg) * 1000) / 10 : 0;
 
   // Build chart data with localized day/month labels
   const chartData = days.map((d) => {
@@ -281,7 +287,9 @@ export function TrendsTab() {
               />
               <StatBox
                 label={lang === "bn" ? "দামের অনুপাত / তারতম্য" : "Price Spread Ratio"}
-                value={weekLow > 0 ? `${num(Math.round(((weekHigh - weekLow) / weekLow) * 100))}%` : "—"}
+                value={
+                  weekLow > 0 ? `${num(Math.round(((weekHigh - weekLow) / weekLow) * 100))}%` : "—"
+                }
                 subtext={weekHigh && weekLow ? `±${num(weekHigh - weekLow)}৳ ব্যবধান` : undefined}
                 icon={<Activity className="h-3.5 w-3.5 text-amber-500" />}
               />
@@ -327,7 +335,11 @@ export function TrendsTab() {
                       }}
                       labelStyle={{ color: "var(--foreground)", fontWeight: 600 }}
                       formatter={(value: number, name: string) => {
-                        const labels: Record<string, string> = { avg: t("trendsAvg"), min: t("trendsMin"), max: t("trendsMax") };
+                        const labels: Record<string, string> = {
+                          avg: t("trendsAvg"),
+                          min: t("trendsMin"),
+                          max: t("trendsMax"),
+                        };
                         return [`${num(value)} ৳`, labels[name] ?? name];
                       }}
                     />
@@ -340,8 +352,22 @@ export function TrendsTab() {
                       dot={{ r: 3, fill: "var(--chart-1)" }}
                       activeDot={{ r: 5 }}
                     />
-                    <Line type="monotone" dataKey="max" stroke="var(--chart-3)" strokeWidth={1} strokeDasharray="4 4" dot={false} />
-                    <Line type="monotone" dataKey="min" stroke="var(--chart-2)" strokeWidth={1} strokeDasharray="4 4" dot={false} />
+                    <Line
+                      type="monotone"
+                      dataKey="max"
+                      stroke="var(--chart-3)"
+                      strokeWidth={1}
+                      strokeDasharray="4 4"
+                      dot={false}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="min"
+                      stroke="var(--chart-2)"
+                      strokeWidth={1}
+                      strokeDasharray="4 4"
+                      dot={false}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -403,9 +429,7 @@ function StatBox({
     <div
       className={
         "rounded-xl p-3 text-center flex flex-col justify-center " +
-        (accent === "primary"
-          ? "bg-primary/10 text-primary"
-          : "bg-secondary text-foreground")
+        (accent === "primary" ? "bg-primary/10 text-primary" : "bg-secondary text-foreground")
       }
     >
       <div className="text-[10px] font-medium uppercase tracking-wide opacity-70 flex items-center justify-center gap-1">

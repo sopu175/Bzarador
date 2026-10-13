@@ -62,7 +62,11 @@ export function SidebarCommunityPanel() {
     <Card className="border-primary/20 shadow-xs overflow-hidden">
       <CardHeader className="p-3.5 pb-2 bg-gradient-to-r from-secondary/50 via-card to-background border-b border-border/50">
         <div className="flex items-center justify-between gap-2">
-          <Tabs value={activeSubTab} onValueChange={(v) => setActiveSubTab(v as any)} className="w-full">
+          <Tabs
+            value={activeSubTab}
+            onValueChange={(v) => setActiveSubTab(v as any)}
+            className="w-full"
+          >
             <TabsList className="h-8 bg-secondary/80 p-0.5 w-full grid grid-cols-2">
               <TabsTrigger value="alerts" className="text-xs px-2 py-1 flex items-center gap-1.5">
                 <BellRing className="h-3 w-3 text-amber-500" />
@@ -144,7 +148,11 @@ export function SidebarCommunityPanel() {
                           </Link>
                           <div className="text-[10px] text-muted-foreground flex items-center gap-1.5 mt-0.5">
                             <span className="flex items-center gap-0.5">
-                              {isEmail ? <Mail className="h-2.5 w-2.5" /> : <Phone className="h-2.5 w-2.5" />}
+                              {isEmail ? (
+                                <Mail className="h-2.5 w-2.5" />
+                              ) : (
+                                <Phone className="h-2.5 w-2.5" />
+                              )}
                               <span>{contactDisplay}</span>
                             </span>
                             <span>·</span>
@@ -185,7 +193,9 @@ export function SidebarCommunityPanel() {
           <div className="space-y-2.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-[11px] text-muted-foreground">
-                {lang === "bn" ? "কমিউনিটি ইউজারদের বাস্তব মতামত" : "Real feedback from community users"}
+                {lang === "bn"
+                  ? "কমিউনিটি ইউজারদের বাস্তব মতামত"
+                  : "Real feedback from community users"}
               </span>
               <a
                 href="#feedback"

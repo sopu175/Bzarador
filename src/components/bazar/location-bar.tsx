@@ -54,9 +54,7 @@ export function LocationBar({ onMarketFilter }: { onMarketFilter?: (marketId: st
       });
       if (onMarketFilter) onMarketFilter(found.id);
       toast.success(
-        lang === "bn"
-          ? `${found.nameBn} নির্বাচন করা হয়েছে`
-          : `Selected ${found.nameEn}`
+        lang === "bn" ? `${found.nameBn} নির্বাচন করা হয়েছে` : `Selected ${found.nameEn}`
       );
     }
   }
@@ -118,8 +116,12 @@ export function LocationBar({ onMarketFilter }: { onMarketFilter?: (marketId: st
               ) : (
                 <span>
                   {isLoading
-                    ? (lang === "bn" ? "অবস্থান শনাক্ত করা হচ্ছে..." : "Detecting location...")
-                    : (lang === "bn" ? "কারওয়ান বাজার নির্ধারিত" : "Defaulting to Karwan Bazar")}
+                    ? lang === "bn"
+                      ? "অবস্থান শনাক্ত করা হচ্ছে..."
+                      : "Detecting location..."
+                    : lang === "bn"
+                      ? "কারওয়ান বাজার নির্ধারিত"
+                      : "Defaulting to Karwan Bazar"}
                 </span>
               )}
             </div>

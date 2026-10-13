@@ -21,7 +21,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useT, useTr, useTUnit, useNum, useLang } from "@/lib/i18n";
 import { toSlug } from "@/lib/slug";
 
@@ -151,7 +157,9 @@ export function ReportsListClient({
                   <SelectValue placeholder={lang === "bn" ? "সব বাজার" : "All Markets"} />
                 </SelectTrigger>
                 <SelectContent className="max-h-64">
-                  <SelectItem value="all">{lang === "bn" ? "সব বাজার (১১টি)" : "All Markets (11)"}</SelectItem>
+                  <SelectItem value="all">
+                    {lang === "bn" ? "সব বাজার (১১টি)" : "All Markets (11)"}
+                  </SelectItem>
                   {markets.map((m) => (
                     <SelectItem key={m.id} value={m.id}>
                       {tr(m.nameBn, m.nameEn)} ({m.district})
@@ -177,7 +185,9 @@ export function ReportsListClient({
                   <SelectValue placeholder={lang === "bn" ? "সব পণ্য" : "All Items"} />
                 </SelectTrigger>
                 <SelectContent className="max-h-64">
-                  <SelectItem value="all">{lang === "bn" ? "সব পণ্য (৫৪টি)" : "All Items (54)"}</SelectItem>
+                  <SelectItem value="all">
+                    {lang === "bn" ? "সব পণ্য (৫৪টি)" : "All Items (54)"}
+                  </SelectItem>
                   {items.map((it) => (
                     <SelectItem key={it.id} value={it.id}>
                       <span className="mr-1">{it.emoji}</span>
@@ -205,8 +215,12 @@ export function ReportsListClient({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{lang === "bn" ? "সকল উৎস" : "All Sources"}</SelectItem>
-                  <SelectItem value="live">{lang === "bn" ? "অনলাইন লাইভ সোর্স" : "Live Web Feeds"}</SelectItem>
-                  <SelectItem value="user">{lang === "bn" ? "কমিউনিটি ইউজার রিপোর্ট" : "Community Reports"}</SelectItem>
+                  <SelectItem value="live">
+                    {lang === "bn" ? "অনলাইন লাইভ সোর্স" : "Live Web Feeds"}
+                  </SelectItem>
+                  <SelectItem value="user">
+                    {lang === "bn" ? "কমিউনিটি ইউজার রিপোর্ট" : "Community Reports"}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -219,9 +233,7 @@ export function ReportsListClient({
               <span className="text-xs">{t("loading")}</span>
             </div>
           ) : reports.length === 0 ? (
-            <div className="py-12 text-center text-sm text-muted-foreground">
-              {t("noResults")}
-            </div>
+            <div className="py-12 text-center text-sm text-muted-foreground">{t("noResults")}</div>
           ) : (
             <div className="divide-y divide-border/60 rounded-xl border border-border/60 overflow-hidden bg-card">
               {reports.map((r) => {
@@ -268,7 +280,9 @@ export function ReportsListClient({
                         <div className="text-[11px] text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            <span>{dateStr}, {timeStr}</span>
+                            <span>
+                              {dateStr}, {timeStr}
+                            </span>
                           </span>
                           <span>·</span>
                           {r.sourceName ? (
@@ -288,9 +302,7 @@ export function ReportsListClient({
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 self-end sm:self-center border-t sm:border-t-0 pt-2 sm:pt-0 w-full sm:w-auto">
                       <div className="text-right">
-                        <div className="text-base font-bold text-foreground">
-                          {num(r.price)}৳
-                        </div>
+                        <div className="text-base font-bold text-foreground">{num(r.price)}৳</div>
                         <div className="text-[10px] text-muted-foreground">
                           {t("perUnit")} {tUnit(r.item.unit)}
                         </div>

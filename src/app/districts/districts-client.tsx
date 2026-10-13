@@ -44,9 +44,13 @@ export function DistrictsListClient({ districts }: { districts: any[] }) {
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              <span>{lang === "bn" ? "সকল জেলা" : "All Districts"} ({num(districts.length)})</span>
+              <span>
+                {lang === "bn" ? "সকল জেলা" : "All Districts"} ({num(districts.length)})
+              </span>
             </CardTitle>
-            <Badge variant="secondary">{num(filtered.length)} {t("statDistricts")}</Badge>
+            <Badge variant="secondary">
+              {num(filtered.length)} {t("statDistricts")}
+            </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             {lang === "bn"
@@ -61,7 +65,11 @@ export function DistrictsListClient({ districts }: { districts: any[] }) {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={lang === "bn" ? "জেলার নাম খুঁজুন (যেমন ঢাকা, বরিশাল, চট্টগ্রাম)..." : "Search district name..."}
+              placeholder={
+                lang === "bn"
+                  ? "জেলার নাম খুঁজুন (যেমন ঢাকা, বরিশাল, চট্টগ্রাম)..."
+                  : "Search district name..."
+              }
               className="pl-9 h-10 bg-background"
             />
           </div>
@@ -83,9 +91,13 @@ export function DistrictsListClient({ districts }: { districts: any[] }) {
                     </div>
                     <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
                       <Store className="h-3 w-3 text-muted-foreground/70" />
-                      <span>{num(d.marketCount)} {t("statMarkets")}</span>
+                      <span>
+                        {num(d.marketCount)} {t("statMarkets")}
+                      </span>
                       <span>·</span>
-                      <span>{num(d.reportCount)} {t("statReports")}</span>
+                      <span>
+                        {num(d.reportCount)} {t("statReports")}
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -71,8 +71,8 @@
   --ring: oklch(0.52 0.14 145);
   /* Chart colors: market palette */
   --chart-1: oklch(0.52 0.14 145); /* green — primary */
-  --chart-2: oklch(0.7 0.16 65);  /* amber */
-  --chart-3: oklch(0.62 0.2 25);  /* red chili */
+  --chart-2: oklch(0.7 0.16 65); /* amber */
+  --chart-3: oklch(0.62 0.2 25); /* red chili */
   --chart-4: oklch(0.7 0.13 180); /* teal */
   --chart-5: oklch(0.55 0.12 290); /* eggplant purple */
   --sidebar: oklch(0.985 0.005 95);

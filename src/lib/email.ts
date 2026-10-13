@@ -53,11 +53,26 @@ type AlertEmailParams = {
 };
 
 export async function sendPriceAlertConfirmation(params: AlertEmailParams) {
-  const { toEmail, itemNameBn, itemNameEn, itemEmoji, targetPrice, direction, currentPrice, marketName } = params;
+  const {
+    toEmail,
+    itemNameBn,
+    itemNameEn,
+    itemEmoji,
+    targetPrice,
+    direction,
+    currentPrice,
+    marketName,
+  } = params;
   const transporter = await getTransporter();
 
-  const directionTextBn = direction === "below" ? `${targetPrice}৳ বা তার নিচে নামলে` : `${targetPrice}৳ বা তার উপরে উঠলে`;
-  const directionTextEn = direction === "below" ? `drops below or reaches ${targetPrice} BDT` : `rises above or reaches ${targetPrice} BDT`;
+  const directionTextBn =
+    direction === "below"
+      ? `${targetPrice}৳ বা তার নিচে নামলে`
+      : `${targetPrice}৳ বা তার উপরে উঠলে`;
+  const directionTextEn =
+    direction === "below"
+      ? `drops below or reaches ${targetPrice} BDT`
+      : `rises above or reaches ${targetPrice} BDT`;
 
   const htmlContent = `
     <!DOCTYPE html>

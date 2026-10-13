@@ -54,9 +54,13 @@ export function MarketsListClient({ markets }: { markets: any[] }) {
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl flex items-center gap-2">
               <Store className="h-5 w-5 text-primary" />
-              <span>{lang === "bn" ? "সকল বাজার" : "All Markets"} ({num(markets.length)})</span>
+              <span>
+                {lang === "bn" ? "সকল বাজার" : "All Markets"} ({num(markets.length)})
+              </span>
             </CardTitle>
-            <Badge variant="secondary">{num(filtered.length)} {t("statMarkets")}</Badge>
+            <Badge variant="secondary">
+              {num(filtered.length)} {t("statMarkets")}
+            </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             {lang === "bn"
@@ -72,7 +76,11 @@ export function MarketsListClient({ markets }: { markets: any[] }) {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={lang === "bn" ? "বাজার বা জেলার নাম খুঁজুন (যেমন কারওয়ান বাজার, মিরপুর)..." : "Search market or district..."}
+              placeholder={
+                lang === "bn"
+                  ? "বাজার বা জেলার নাম খুঁজুন (যেমন কারওয়ান বাজার, মিরপুর)..."
+                  : "Search market or district..."
+              }
               className="pl-9 h-10 bg-background"
             />
           </div>
@@ -87,8 +95,8 @@ export function MarketsListClient({ markets }: { markets: any[] }) {
                     ? "সকল জেলা"
                     : "All Districts"
                   : dMeta
-                  ? tr(dMeta.bn, dMeta.en)
-                  : dist;
+                    ? tr(dMeta.bn, dMeta.en)
+                    : dist;
               return (
                 <button
                   key={dist}
@@ -125,9 +133,13 @@ export function MarketsListClient({ markets }: { markets: any[] }) {
                       </div>
                       <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
                         <MapPin className="h-3 w-3 text-muted-foreground/70" />
-                        <span>{m.upazila}, {m.district}</span>
+                        <span>
+                          {m.upazila}, {m.district}
+                        </span>
                         <span>·</span>
-                        <span>{num(m._count?.reports ?? 0)} {t("statReports")}</span>
+                        <span>
+                          {num(m._count?.reports ?? 0)} {t("statReports")}
+                        </span>
                       </div>
                     </div>
                   </div>

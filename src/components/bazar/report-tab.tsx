@@ -41,7 +41,10 @@ async function fetchItems(): Promise<{ byCategory: Record<string, Item[]>; categ
   return res.json();
 }
 
-async function fetchMarkets(): Promise<{ byDistrict: Record<string, Market[]>; districts: string[] }> {
+async function fetchMarkets(): Promise<{
+  byDistrict: Record<string, Market[]>;
+  districts: string[];
+}> {
   const res = await fetch("/api/markets");
   if (!res.ok) throw new Error("Failed to load markets");
   return res.json();
@@ -65,7 +68,9 @@ export function ReportTab() {
   const [submitting, setSubmitting] = useState(false);
 
   const selectedItem = itemsData
-    ? Object.values(itemsData.byCategory).flat().find((i) => i.id === itemId)
+    ? Object.values(itemsData.byCategory)
+        .flat()
+        .find((i) => i.id === itemId)
     : null;
 
   async function onSubmit(e: React.FormEvent) {
@@ -133,9 +138,7 @@ export function ReportTab() {
               <SelectContent className="max-h-80">
                 {itemsData?.categories.map((cat) => (
                   <SelectGroup key={cat}>
-                    <SelectLabel className="text-primary font-semibold">
-                      {tCat(cat)}
-                    </SelectLabel>
+                    <SelectLabel className="text-primary font-semibold">{tCat(cat)}</SelectLabel>
                     {itemsData.byCategory[cat].map((it) => (
                       <SelectItem key={it.id} value={it.id}>
                         <span className="mr-1.5">{it.emoji}</span>
@@ -195,7 +198,8 @@ export function ReportTab() {
             </div>
             {selectedItem && price && !isNaN(parseFloat(price)) && (
               <p className="text-xs text-muted-foreground">
-                {tr(selectedItem.nameBn, selectedItem.nameEn)} · {t("perUnit")} {selectedItem.unit} · {num(parseFloat(price))} ৳
+                {tr(selectedItem.nameBn, selectedItem.nameEn)} · {t("perUnit")} {selectedItem.unit}{" "}
+                · {num(parseFloat(price))} ৳
               </p>
             )}
           </div>

@@ -1,12 +1,21 @@
 import Link from "next/link";
-import { ArrowLeft, Globe, Newspaper, Landmark, CheckCircle2, ShieldCheck, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  Globe,
+  Newspaper,
+  Landmark,
+  CheckCircle2,
+  ShieldCheck,
+  ExternalLink,
+} from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/bazar/site-header-footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata = {
   title: "উৎস ও ডেটা সংগ্রহ পদ্ধতি | বাজার দাম",
-  description: "বাজার দাম অ্যাপ্লিকেশনে ব্যবহৃত সরকারি, জাতীয় দৈনিক ও লাইভ ডাটা সোর্সের বিস্তারিত তালিকা।",
+  description:
+    "বাজার দাম অ্যাপ্লিকেশনে ব্যবহৃত সরকারি, জাতীয় দৈনিক ও লাইভ ডাটা সোর্সের বিস্তারিত তালিকা।",
 };
 
 const sources = [
@@ -16,21 +25,24 @@ const sources = [
       {
         name: "কৃষি বিপণন অধিদপ্তর (DAM)",
         url: "http://www.dam.gov.bd",
-        description: "কৃষি মন্ত্রণালয়ের অধীনস্থ দেশের ৬৪ জেলার দৈনিক পাইকারি ও খুচরা বাজার মনিটরিং ডাটা।",
+        description:
+          "কৃষি মন্ত্রণালয়ের অধীনস্থ দেশের ৬৪ জেলার দৈনিক পাইকারি ও খুচরা বাজার মনিটরিং ডাটা।",
         frequency: "দৈনিক আপডেট",
         type: "সরকারি",
       },
       {
         name: "ট্রেডিং কর্পোরেশন অব বাংলাদেশ (TCB)",
         url: "https://www.tcb.gov.bd",
-        description: "বাণিজ্য মন্ত্রণালয়ের আওতাধীন নিত্যপ্রয়োজনীয় খাদ্যপণ্যের ন্যায্যমূল্য ও খুচরা বাজার দর তালিকা।",
+        description:
+          "বাণিজ্য মন্ত্রণালয়ের আওতাধীন নিত্যপ্রয়োজনীয় খাদ্যপণ্যের ন্যায্যমূল্য ও খুচরা বাজার দর তালিকা।",
         frequency: "দৈনিক আপডেট",
         type: "সরকারি",
       },
       {
         name: "বাংলাদেশ পরিসংখ্যান ব্যুরো (BBS)",
         url: "http://www.bbs.gov.bd",
-        description: "জাতীয় ভোক্তা মূল্যসূচক (CPI), ঐতিহাসিক মূল্যস্ফীতি ও গড় পারিবারিক ব্যয় জরিপ।",
+        description:
+          "জাতীয় ভোক্তা মূল্যসূচক (CPI), ঐতিহাসিক মূল্যস্ফীতি ও গড় পারিবারিক ব্যয় জরিপ।",
         frequency: "মাসিক/বার্ষিক",
         type: "পরিসংখ্যান",
       },
@@ -49,7 +61,8 @@ const sources = [
       {
         name: "The Business Standard (TBS)",
         url: "https://www.tbsnews.net",
-        description: "ব্যবসায় ও অর্থনীতি ভিত্তিক জাতীয় দৈনিকের বাজার দর অনুসন্ধান ও বিশেষ প্রতিবেদন।",
+        description:
+          "ব্যবসায় ও অর্থনীতি ভিত্তিক জাতীয় দৈনিকের বাজার দর অনুসন্ধান ও বিশেষ প্রতিবেদন।",
         frequency: "দৈনিক লাইভ",
         type: "সংবাদ",
       },
@@ -70,7 +83,8 @@ const sources = [
       {
         name: "Dhaka Tribune",
         url: "https://www.dhakatribune.com",
-        description: "রাজধানীর বিভিন্ন বাজার এবং বিভাগীয় শহরের নিত্যপণ্যের সরবরাহ ও দাম সংক্রান্ত রিপোর্ট।",
+        description:
+          "রাজধানীর বিভিন্ন বাজার এবং বিভাগীয় শহরের নিত্যপণ্যের সরবরাহ ও দাম সংক্রান্ত রিপোর্ট।",
         frequency: "দৈনিক লাইভ",
         type: "সংবাদ",
       },
@@ -84,7 +98,8 @@ const sources = [
       {
         name: "Dhaka Post (ঢাকা পোস্ট)",
         url: "https://www.dhakapost.com",
-        description: "শাকসবজি, ব্রয়লার মুরগি, ডিম, পেঁয়াজ ও মাছের খুচরা বাজার দর সম্পর্কিত সংবাদ।",
+        description:
+          "শাকসবজি, ব্রয়লার মুরগি, ডিম, পেঁয়াজ ও মাছের খুচরা বাজার দর সম্পর্কিত সংবাদ।",
         frequency: "দৈনিক লাইভ",
         type: "সংবাদ",
       },
@@ -130,7 +145,8 @@ export default function SourcesPage() {
             উৎস ও ডেটা সংগ্রহ পদ্ধতি (Sources & Methodology)
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            বাজার দাম একটি সম্পূর্ণ উন্মুক্ত ও স্বচ্ছ কমিউনিটি অ্যাপ্লিকেশন। এখানে প্রদর্শিত সমস্ত দাম ও তথ্য কোথা থেকে আসে এবং কিভাবে প্রস্তুত হয় তার পূর্ণ বিবরণ নিচে দেওয়া হলো।
+            বাজার দাম একটি সম্পূর্ণ উন্মুক্ত ও স্বচ্ছ কমিউনিটি অ্যাপ্লিকেশন। এখানে প্রদর্শিত সমস্ত
+            দাম ও তথ্য কোথা থেকে আসে এবং কিভাবে প্রস্তুত হয় তার পূর্ণ বিবরণ নিচে দেওয়া হলো।
           </p>
         </div>
 
@@ -144,13 +160,18 @@ export default function SourcesPage() {
           </CardHeader>
           <CardContent className="text-xs sm:text-sm text-muted-foreground space-y-3 leading-relaxed">
             <p>
-              ১. <strong>স্বয়ংক্রিয় লাইভ সংগ্রাহক (Live Scraper):</strong> প্রতিদিন সকালবেলা শীর্ষস্থানীয় জাতীয় সংবাদ মাধ্যম ও সরকারি পোর্টাল থেকে পণ্যের বাজার দর সম্পর্কিত প্রতিবেদন থেকে দামের তথ্য সংগ্রহ করা হয়।
+              ১. <strong>স্বয়ংক্রিয় লাইভ সংগ্রাহক (Live Scraper):</strong> প্রতিদিন সকালবেলা
+              শীর্ষস্থানীয় জাতীয় সংবাদ মাধ্যম ও সরকারি পোর্টাল থেকে পণ্যের বাজার দর সম্পর্কিত
+              প্রতিবেদন থেকে দামের তথ্য সংগ্রহ করা হয়।
             </p>
             <p>
-              ২. <strong>কমিউনিটি রিপোর্ট (Crowdsourced Pricing):</strong> স্থানীয় বাজারের ক্রেতা ও বিক্রেতারা সরাসরি বাজারে গিয়ে যে দামে পণ্য ক্রয়-বিক্রয় করেছেন তা অ্যাপে জমা দেন।
+              ২. <strong>কমিউনিটি রিপোর্ট (Crowdsourced Pricing):</strong> স্থানীয় বাজারের ক্রেতা ও
+              বিক্রেতারা সরাসরি বাজারে গিয়ে যে দামে পণ্য ক্রয়-বিক্রয় করেছেন তা অ্যাপে জমা দেন।
             </p>
             <p>
-              ৩. <strong>আউটলায়ার ফিল্টারিং ও গড় মান:</strong> অস্বাভাবিক বা ভুল এন্ট্রি বাদ দিয়ে প্রতিটি বাজারের জন্য সুষম গড় দাম (Average Price) এবং গতকালের সাথে শতকরা পরিবর্তন হিসাব করা হয়।
+              ৩. <strong>আউটলায়ার ফিল্টারিং ও গড় মান:</strong> অস্বাভাবিক বা ভুল এন্ট্রি বাদ দিয়ে
+              প্রতিটি বাজারের জন্য সুষম গড় দাম (Average Price) এবং গতকালের সাথে শতকরা পরিবর্তন
+              হিসাব করা হয়।
             </p>
           </CardContent>
         </Card>
@@ -170,9 +191,7 @@ export default function SourcesPage() {
                     className="p-3.5 rounded-xl border border-border/60 bg-card hover:bg-secondary/40 transition-colors space-y-2"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="font-semibold text-sm text-foreground">
-                        {src.name}
-                      </div>
+                      <div className="font-semibold text-sm text-foreground">{src.name}</div>
                       <Badge variant="secondary" className="text-[10px]">
                         {src.frequency}
                       </Badge>

@@ -42,22 +42,46 @@ const SEARCH_QUERIES = [
 ];
 
 // Pages we won't even try to read (known to be behind Cloudflare / JS walls)
-const BLOCKED_HOSTS = [
-  "facebook.com",
-  "ittefaq.com.bd",
-  "prothomalo.com",
-];
+const BLOCKED_HOSTS = ["facebook.com", "ittefaq.com.bd", "prothomalo.com"];
 
 // Real Bangladesh news sources for market prices
 export const BD_NEWS_PORTALS = [
-  { name: "The Business Standard (TBS)", url: "https://www.tbsnews.net", banglaUrl: "https://tbsnews.net/bangla" },
-  { name: "Dhaka Tribune", url: "https://www.dhakatribune.com", banglaUrl: "https://bangla.dhakatribune.com" },
-  { name: "The Daily Star", url: "https://www.thedailystar.net", banglaUrl: "https://bangla.thedailystar.net" },
-  { name: "Prothom Alo", url: "https://www.prothomalo.com", banglaUrl: "https://www.prothomalo.com" },
-  { name: "Daily Ittefaq", url: "https://www.ittefaq.com.bd", banglaUrl: "https://www.ittefaq.com.bd" },
-  { name: "Jago News 24", url: "https://www.jagonews24.com", banglaUrl: "https://www.jagonews24.com" },
+  {
+    name: "The Business Standard (TBS)",
+    url: "https://www.tbsnews.net",
+    banglaUrl: "https://tbsnews.net/bangla",
+  },
+  {
+    name: "Dhaka Tribune",
+    url: "https://www.dhakatribune.com",
+    banglaUrl: "https://bangla.dhakatribune.com",
+  },
+  {
+    name: "The Daily Star",
+    url: "https://www.thedailystar.net",
+    banglaUrl: "https://bangla.thedailystar.net",
+  },
+  {
+    name: "Prothom Alo",
+    url: "https://www.prothomalo.com",
+    banglaUrl: "https://www.prothomalo.com",
+  },
+  {
+    name: "Daily Ittefaq",
+    url: "https://www.ittefaq.com.bd",
+    banglaUrl: "https://www.ittefaq.com.bd",
+  },
+  {
+    name: "Jago News 24",
+    url: "https://www.jagonews24.com",
+    banglaUrl: "https://www.jagonews24.com",
+  },
   { name: "Dhaka Post", url: "https://www.dhakapost.com", banglaUrl: "https://www.dhakapost.com" },
-  { name: "Department of Agricultural Marketing (DAM)", url: "http://www.dam.gov.bd", banglaUrl: "http://www.dam.gov.bd" },
+  {
+    name: "Department of Agricultural Marketing (DAM)",
+    url: "http://www.dam.gov.bd",
+    banglaUrl: "http://www.dam.gov.bd",
+  },
 ];
 
 async function tryZAI() {
@@ -104,7 +128,6 @@ async function readPage(url: string): Promise<{ title: string; text: string } | 
     return null;
   }
 }
-
 
 async function extractPricesWithLLM(
   corpus: string,
@@ -158,7 +181,10 @@ ${corpus.slice(0, 18000)}`;
     });
 
     const raw = completion.choices[0]?.message?.content ?? "";
-    const cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*$/g, "").trim();
+    const cleaned = raw
+      .replace(/```json\s*/gi, "")
+      .replace(/```\s*$/g, "")
+      .trim();
     const parsed = JSON.parse(cleaned);
     if (Array.isArray(parsed)) return parsed as ExtractedPrice[];
     if (parsed && typeof parsed === "object") return [parsed as ExtractedPrice];
@@ -179,7 +205,10 @@ function generateNewsLivePrices(
   sourceUrl: string;
 }> {
   const sources = [
-    { name: "The Business Standard (TBS)", url: "https://www.tbsnews.net/bangladesh/market-prices" },
+    {
+      name: "The Business Standard (TBS)",
+      url: "https://www.tbsnews.net/bangladesh/market-prices",
+    },
     { name: "Dhaka Tribune", url: "https://www.dhakatribune.com/bangladesh/economy" },
     { name: "The Daily Star", url: "https://www.thedailystar.net/business/economy" },
     { name: "Prothom Alo", url: "https://www.prothomalo.com/business" },
@@ -193,14 +222,14 @@ function generateNewsLivePrices(
     const src = sources[idx % sources.length];
     // Baseline realistic variation (+/- 5-15%)
     let base = 60;
-    if (item.category === "vegetable") base = 40 + (idx * 5) % 60;
-    else if (item.category === "fish") base = 300 + (idx * 70) % 900;
-    else if (item.category === "meat") base = 250 + (idx * 150) % 1100;
-    else if (item.category === "fruit") base = 80 + (idx * 20) % 200;
-    else if (item.category === "rice") base = 65 + (idx * 7) % 50;
-    else if (item.category === "oil") base = 165 + (idx * 15) % 120;
-    else if (item.category === "spice") base = 120 + (idx * 40) % 450;
-    else base = 90 + (idx * 10) % 50;
+    if (item.category === "vegetable") base = 40 + ((idx * 5) % 60);
+    else if (item.category === "fish") base = 300 + ((idx * 70) % 900);
+    else if (item.category === "meat") base = 250 + ((idx * 150) % 1100);
+    else if (item.category === "fruit") base = 80 + ((idx * 20) % 200);
+    else if (item.category === "rice") base = 65 + ((idx * 7) % 50);
+    else if (item.category === "oil") base = 165 + ((idx * 15) % 120);
+    else if (item.category === "spice") base = 120 + ((idx * 40) % 450);
+    else base = 90 + ((idx * 10) % 50);
 
     const price = Math.round(base);
     return {
@@ -250,11 +279,19 @@ export async function refreshLivePrices(): Promise<{
         seenUrl.add(h.url);
         return true;
       });
-      const snippetCorpus = hits.map((h) => `[${h.host_name}] ${h.name}\n${h.snippet}`).join("\n\n");
-      const readable = hits.filter((h) => !BLOCKED_HOSTS.some((b) => h.host_name.includes(b))).slice(0, 3);
+      const snippetCorpus = hits
+        .map((h) => `[${h.host_name}] ${h.name}\n${h.snippet}`)
+        .join("\n\n");
+      const readable = hits
+        .filter((h) => !BLOCKED_HOSTS.some((b) => h.host_name.includes(b)))
+        .slice(0, 3);
       const pageTexts = await Promise.all(readable.map((h) => readPage(h.url)));
       const pageCorpus = readable
-        .map((h, i) => (pageTexts[i] ? `[${h.host_name}] ${pageTexts[i]!.title}\n${pageTexts[i]!.text.slice(0, 4000)}` : ""))
+        .map((h, i) =>
+          pageTexts[i]
+            ? `[${h.host_name}] ${pageTexts[i]!.title}\n${pageTexts[i]!.text.slice(0, 4000)}`
+            : ""
+        )
         .filter(Boolean)
         .join("\n\n");
       const corpus = `${snippetCorpus}\n\n--- ARTICLE TEXT ---\n${pageCorpus}`;
@@ -292,7 +329,9 @@ export async function refreshLivePrices(): Promise<{
         if (!item || !ep.price || ep.price <= 0) continue;
         let marketId = defaultMarketId;
         if (ep.market) {
-          const matched = dhakaMarkets.find((m) => m.nameBn.includes(ep.market!) || ep.market!.includes(m.nameBn));
+          const matched = dhakaMarkets.find(
+            (m) => m.nameBn.includes(ep.market!) || ep.market!.includes(m.nameBn)
+          );
           if (matched) marketId = matched.id;
         }
         const src = ep.source || "News Bulletin";
@@ -367,7 +406,6 @@ export async function refreshLivePrices(): Promise<{
   }
 }
 
-
 /**
  * Fetch a live price for a single item by name (used by the per-item "fetch live" button).
  */
@@ -381,9 +419,7 @@ export async function refreshLivePriceForItem(itemId: string): Promise<{
 
   const q = `আজকের ${item.nameBn} ${item.nameEn} দাম বাংলাদেশ বাজার টাকা`;
   const hits = await search(q, 6, 14);
-  const snippetCorpus = hits
-    .map((h) => `[${h.host_name}] ${h.name}\n${h.snippet}`)
-    .join("\n\n");
+  const snippetCorpus = hits.map((h) => `[${h.host_name}] ${h.name}\n${h.snippet}`).join("\n\n");
 
   const readable = hits
     .filter((h) => !BLOCKED_HOSTS.some((b) => h.host_name.includes(b)))
@@ -453,4 +489,3 @@ export async function refreshLivePriceForItem(itemId: string): Promise<{
 
   return { price, sourceName, sourceUrl };
 }
-

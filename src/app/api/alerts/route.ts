@@ -23,17 +23,19 @@ export async function GET(request: Request) {
   return NextResponse.json({ alerts });
 }
 
-const alertSchema = z.object({
-  itemId: z.string().min(1),
-  marketId: z.string().optional().nullable(),
-  targetPrice: z.number().positive().max(100000),
-  direction: z.enum(["below", "above"]),
-  email: z.string().email().optional().or(z.literal("")),
-  phone: z.string().min(6).max(20).optional().or(z.literal("")),
-}).refine((data) => !!data.email || !!data.phone, {
-  message: "Either email or phone must be provided",
-  path: ["email"],
-});
+const alertSchema = z
+  .object({
+    itemId: z.string().min(1),
+    marketId: z.string().optional().nullable(),
+    targetPrice: z.number().positive().max(100000),
+    direction: z.enum(["below", "above"]),
+    email: z.string().email().optional().or(z.literal("")),
+    phone: z.string().min(6).max(20).optional().or(z.literal("")),
+  })
+  .refine((data) => !!data.email || !!data.phone, {
+    message: "Either email or phone must be provided",
+    path: ["email"],
+  });
 
 // POST /api/alerts - create a new price alert and send email
 export async function POST(request: Request) {
@@ -92,4 +94,3 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ alert, emailSent: emailResult?.success ?? false }, { status: 201 });
 }
-

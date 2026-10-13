@@ -5,7 +5,11 @@ export function getBangladeshDateBoundaries() {
   const now = new Date();
   // BD is UTC+6
   const bdTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
-  const bdMidnightUtc = Date.UTC(bdTime.getUTCFullYear(), bdTime.getUTCMonth(), bdTime.getUTCDate());
+  const bdMidnightUtc = Date.UTC(
+    bdTime.getUTCFullYear(),
+    bdTime.getUTCMonth(),
+    bdTime.getUTCDate()
+  );
   // The moment BD midnight happened in UTC:
   const todayStart = new Date(bdMidnightUtc - 6 * 60 * 60 * 1000);
   const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
@@ -29,13 +33,16 @@ export async function getLatestPrices(marketId?: string) {
   });
 
   // Group by itemId
-  const byItem = new Map<string, {
-    item: typeof reports[number]["item"];
-    todayReports: typeof reports;
-    yesterdayReports: typeof reports;
-    olderReports: typeof reports;
-    weekReports: typeof reports;
-  }>();
+  const byItem = new Map<
+    string,
+    {
+      item: (typeof reports)[number]["item"];
+      todayReports: typeof reports;
+      yesterdayReports: typeof reports;
+      olderReports: typeof reports;
+      weekReports: typeof reports;
+    }
+  >();
 
   const { todayStart, yesterdayStart } = getBangladeshDateBoundaries();
 
@@ -59,7 +66,14 @@ export async function getLatestPrices(marketId?: string) {
   }
 
   const result: Array<{
-    item: { id: string; nameBn: string; nameEn: string; category: string; unit: string; emoji: string };
+    item: {
+      id: string;
+      nameBn: string;
+      nameEn: string;
+      category: string;
+      unit: string;
+      emoji: string;
+    };
     avgToday: number | null;
     avgYesterday: number | null;
     change: number;
@@ -85,7 +99,8 @@ export async function getLatestPrices(marketId?: string) {
         avgToday = avgYesterday;
         // Compare with older reports for trend if available
         if (entry.olderReports.length > 0) {
-          avgYesterday = entry.olderReports.reduce((s, r) => s + r.price, 0) / entry.olderReports.length;
+          avgYesterday =
+            entry.olderReports.reduce((s, r) => s + r.price, 0) / entry.olderReports.length;
         } else {
           avgYesterday = null;
         }
@@ -95,12 +110,14 @@ export async function getLatestPrices(marketId?: string) {
     }
 
     const change = avgToday != null && avgYesterday != null ? avgToday - avgYesterday : 0;
-    const changePct = avgToday != null && avgYesterday != null && avgYesterday > 0
-      ? (change / avgYesterday) * 100
-      : 0;
+    const changePct =
+      avgToday != null && avgYesterday != null && avgYesterday > 0
+        ? (change / avgYesterday) * 100
+        : 0;
 
     // Find the most recent live-sourced report (today or from recent week), if any
-    const liveReport = entry.todayReports.find((r) => r.sourceName) || entry.weekReports.find((r) => r.sourceName);
+    const liveReport =
+      entry.todayReports.find((r) => r.sourceName) || entry.weekReports.find((r) => r.sourceName);
 
     result.push({
       item: entry.item,
@@ -163,7 +180,8 @@ export async function getPriceTrend(
       byMonth.set(monthKey, list);
     }
 
-    const months: Array<{ date: string; avg: number; min: number; max: number; count: number }> = [];
+    const months: Array<{ date: string; avg: number; min: number; max: number; count: number }> =
+      [];
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const key = d.toISOString().slice(0, 7);

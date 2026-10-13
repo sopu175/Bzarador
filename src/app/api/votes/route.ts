@@ -57,7 +57,11 @@ export async function POST(request: Request) {
       db.priceVote.count({ where: { itemId, voteType: "cheap" } }),
     ]);
 
-    return NextResponse.json({ ok: true, vote, stats: { accurate, high, cheap, total: accurate + high + cheap } });
+    return NextResponse.json({
+      ok: true,
+      vote,
+      stats: { accurate, high, cheap, total: accurate + high + cheap },
+    });
   } catch (e) {
     return NextResponse.json({ error: "Failed to record vote" }, { status: 500 });
   }

@@ -2,14 +2,28 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MessageSquarePlus, Star, Send, Loader2, Sparkles, User, MessageCircle } from "lucide-react";
+import {
+  MessageSquarePlus,
+  Star,
+  Send,
+  Loader2,
+  Sparkles,
+  User,
+  MessageCircle,
+} from "lucide-react";
 import { useT, useTr, useNum, useLang } from "@/lib/i18n";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +65,9 @@ export function FeedbackTab() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!comment.trim()) {
-      toast.error(lang === "bn" ? "অনুগ্রহ করে আপনার মন্তব্য লিখুন।" : "Please enter your comment.");
+      toast.error(
+        lang === "bn" ? "অনুগ্রহ করে আপনার মন্তব্য লিখুন।" : "Please enter your comment."
+      );
       return;
     }
 
@@ -101,9 +117,7 @@ export function FeedbackTab() {
             <MessageSquarePlus className="h-5 w-5 text-primary" />
             {t("feedbackTitle")}
           </CardTitle>
-          <CardDescription className="text-xs">
-            {t("feedbackSubtitle")}
-          </CardDescription>
+          <CardDescription className="text-xs">{t("feedbackSubtitle")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -145,8 +159,12 @@ export function FeedbackTab() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="general">{categoryLabels.general[lang]}</SelectItem>
-                    <SelectItem value="price_accuracy">{categoryLabels.price_accuracy[lang]}</SelectItem>
-                    <SelectItem value="feature_request">{categoryLabels.feature_request[lang]}</SelectItem>
+                    <SelectItem value="price_accuracy">
+                      {categoryLabels.price_accuracy[lang]}
+                    </SelectItem>
+                    <SelectItem value="feature_request">
+                      {categoryLabels.feature_request[lang]}
+                    </SelectItem>
                     <SelectItem value="bug">{categoryLabels.bug[lang]}</SelectItem>
                   </SelectContent>
                 </Select>
@@ -230,12 +248,17 @@ export function FeedbackTab() {
             </div>
           ) : feedbacks.length === 0 ? (
             <div className="p-8 text-center text-xs text-muted-foreground">
-              {lang === "bn" ? "এখনও কোনো মতামত জমা পড়েনি। প্রথম মতামতটি আপনিই দিন!" : "No feedback submitted yet. Be the first to share!"}
+              {lang === "bn"
+                ? "এখনও কোনো মতামত জমা পড়েনি। প্রথম মতামতটি আপনিই দিন!"
+                : "No feedback submitted yet. Be the first to share!"}
             </div>
           ) : (
             <div className="divide-y divide-border/60">
               {feedbacks.map((fb) => (
-                <div key={fb.id} className="p-4 space-y-1.5 hover:bg-secondary/30 transition-colors">
+                <div
+                  key={fb.id}
+                  className="p-4 space-y-1.5 hover:bg-secondary/30 transition-colors"
+                >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">

@@ -3,12 +3,7 @@
 import { Languages } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function LanguageToggle() {
   const lang = useLang((s) => s.lang);
@@ -28,9 +23,7 @@ export function LanguageToggle() {
             <span>{lang === "bn" ? "EN" : "বাং"}</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
-          {lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
-        </TooltipContent>
+        <TooltipContent>{lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

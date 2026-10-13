@@ -2,7 +2,18 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, BellRing, Loader2, Search, Plus, TrendingDown, TrendingUp, Phone, Mail, CheckCircle2 } from "lucide-react";
+import {
+  Bell,
+  BellRing,
+  Loader2,
+  Search,
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Phone,
+  Mail,
+  CheckCircle2,
+} from "lucide-react";
 import { useT, useTr, useTCat, useNum, useLang } from "@/lib/i18n";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -41,7 +52,14 @@ type AlertRow = {
   item: Item;
 };
 type PriceRow = {
-  item: { id: string; nameBn: string; nameEn: string; category: string; unit: string; emoji: string };
+  item: {
+    id: string;
+    nameBn: string;
+    nameEn: string;
+    category: string;
+    unit: string;
+    emoji: string;
+  };
   avgToday: number | null;
   change: number;
   changePct: number;
@@ -83,7 +101,11 @@ export function AlertsTab() {
   const [findEmail, setFindEmail] = useState("");
   const [searchedEmail, setSearchedEmail] = useState("");
 
-  const { data: myAlertsData, isLoading: myAlertsLoading, isFetching: myAlertsFetching } = useQuery({
+  const {
+    data: myAlertsData,
+    isLoading: myAlertsLoading,
+    isFetching: myAlertsFetching,
+  } = useQuery({
     queryKey: ["alerts", searchedEmail],
     queryFn: async () => {
       const res = await fetch(`/api/alerts?email=${encodeURIComponent(searchedEmail)}`);
@@ -96,7 +118,9 @@ export function AlertsTab() {
   const myAlerts = myAlertsData?.alerts ?? [];
   const pricesMap = new Map((pricesData?.prices ?? []).map((p) => [p.item.id, p]));
   const selectedItem = itemsData
-    ? Object.values(itemsData.byCategory).flat().find((i) => i.id === itemId)
+    ? Object.values(itemsData.byCategory)
+        .flat()
+        .find((i) => i.id === itemId)
     : null;
 
   async function onSubmit(e: React.FormEvent) {
@@ -124,11 +148,12 @@ export function AlertsTab() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "submit failed");
-      
+
       toast.success(t("alertsSuccess"), {
-        description: lang === "bn"
-          ? `${email} ঠিকানায় নিশ্চিতকরণ বার্তা পাঠানো হয়েছে।`
-          : `Confirmation email sent to ${email}.`,
+        description:
+          lang === "bn"
+            ? `${email} ঠিকানায় নিশ্চিতকরণ বার্তা পাঠানো হয়েছে।`
+            : `Confirmation email sent to ${email}.`,
       });
       setTargetPrice("");
       // If user is searching their own email, refresh
@@ -145,7 +170,11 @@ export function AlertsTab() {
   function onFind() {
     const p = findEmail.trim().toLowerCase();
     if (!p || !p.includes("@")) {
-      toast.error(lang === "bn" ? "অনুগ্রহ করে একটি সঠিক ইমেইল ঠিকানা দিন।" : "Please enter a valid email address.");
+      toast.error(
+        lang === "bn"
+          ? "অনুগ্রহ করে একটি সঠিক ইমেইল ঠিকানা দিন।"
+          : "Please enter a valid email address."
+      );
       return;
     }
     setSearchedEmail(p);
@@ -293,7 +322,10 @@ export function AlertsTab() {
             {/* Email */}
             <div className="space-y-1.5">
               <Label className="text-xs font-medium text-muted-foreground" htmlFor="email">
-                {lang === "bn" ? "আপনার ইমেইল ঠিকানা (যেখানে নোটিফিকেশন যাবে)" : "Your Email Address"} <span className="text-destructive">*</span>
+                {lang === "bn"
+                  ? "আপনার ইমেইল ঠিকানা (যেখানে নোটিফিকেশন যাবে)"
+                  : "Your Email Address"}{" "}
+                <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -357,7 +389,12 @@ export function AlertsTab() {
                 className="h-11 bg-card pl-9"
               />
             </div>
-            <Button type="button" onClick={onFind} className="h-11 cursor-pointer" disabled={!findEmail.trim()}>
+            <Button
+              type="button"
+              onClick={onFind}
+              className="h-11 cursor-pointer"
+              disabled={!findEmail.trim()}
+            >
               <Search className="h-4 w-4" />
               <span className="sm:hidden">{t("alertsFindBtn")}</span>
               <span className="hidden sm:inline">{t("alertsFindBtn")}</span>
@@ -373,7 +410,9 @@ export function AlertsTab() {
               ))}
             </div>
           ) : myAlerts.length === 0 ? (
-            <div className="py-6 text-center text-xs text-muted-foreground">{t("alertsNoAlerts")}</div>
+            <div className="py-6 text-center text-xs text-muted-foreground">
+              {t("alertsNoAlerts")}
+            </div>
           ) : (
             <div className="space-y-2">
               {myAlerts.map((a) => {
@@ -387,9 +426,7 @@ export function AlertsTab() {
                     key={a.id}
                     className={
                       "flex items-center gap-3 rounded-xl border p-3 " +
-                      (triggered
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-card")
+                      (triggered ? "border-primary bg-primary/5" : "border-border bg-card")
                     }
                   >
                     <span className="text-2xl">{a.item.emoji}</span>
@@ -403,7 +440,8 @@ export function AlertsTab() {
                         ) : (
                           <TrendingUp className="h-3 w-3 text-red-500" />
                         )}
-                        {a.direction === "below" ? t("alertsBelow") : t("alertsAbove")} {num(a.targetPrice)}৳
+                        {a.direction === "below" ? t("alertsBelow") : t("alertsAbove")}{" "}
+                        {num(a.targetPrice)}৳
                         {current != null && (
                           <>
                             <span className="mx-1">·</span>
@@ -428,4 +466,3 @@ export function AlertsTab() {
     </div>
   );
 }
-

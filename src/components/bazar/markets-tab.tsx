@@ -42,7 +42,11 @@ type Market = {
   upazila: string;
 };
 
-async function fetchMarkets(): Promise<{ markets: Market[]; byDistrict: Record<string, Market[]>; districts: string[] }> {
+async function fetchMarkets(): Promise<{
+  markets: Market[];
+  byDistrict: Record<string, Market[]>;
+  districts: string[];
+}> {
   const res = await fetch("/api/markets");
   if (!res.ok) throw new Error("Failed to load markets");
   return res.json();
@@ -72,16 +76,14 @@ export function MarketsTab() {
 
   const availableMarkets = useMemo(() => {
     if (!marketsData) return [];
-    return district === "all"
-      ? marketsData.markets
-      : marketsData.byDistrict[district] ?? [];
+    return district === "all" ? marketsData.markets : (marketsData.byDistrict[district] ?? []);
   }, [marketsData, district]);
 
   // Derive the effective marketId: fall back to first available if current is invalid
   const effectiveMarketId =
     marketId && availableMarkets.some((m) => m.id === marketId)
       ? marketId
-      : availableMarkets[0]?.id ?? "";
+      : (availableMarkets[0]?.id ?? "");
 
   const { data: pricesData, isLoading: pricesLoading } = useQuery({
     queryKey: ["prices", effectiveMarketId],
@@ -174,42 +176,40 @@ export function MarketsTab() {
               ))}
             </div>
           ) : prices.length === 0 ? (
-            <div className="p-10 text-center text-sm text-muted-foreground">
-              {t("noResults")}
-            </div>
+            <div className="p-10 text-center text-sm text-muted-foreground">{t("noResults")}</div>
           ) : (
             <div className="divide-y divide-border">
               {prices.map((p) => (
-                  <div
-                    key={p.item.id}
-                    onClick={() => setSelectedItemId(p.item.id)}
-                    className="flex items-center gap-3 p-3.5 hover:bg-secondary/60 transition-colors cursor-pointer group"
-                  >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-xl group-hover:scale-105 transition-transform">
-                      {p.item.emoji}
+                <div
+                  key={p.item.id}
+                  onClick={() => setSelectedItemId(p.item.id)}
+                  className="flex items-center gap-3 p-3.5 hover:bg-secondary/60 transition-colors cursor-pointer group"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-xl group-hover:scale-105 transition-transform">
+                    {p.item.emoji}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium truncate group-hover:text-primary transition-colors">
+                      {tr(p.item.nameBn, p.item.nameEn)}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-medium truncate group-hover:text-primary transition-colors">
-                        {tr(p.item.nameBn, p.item.nameEn)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {t("perUnit")} {tUnit(p.item.unit)} · {num(p.reportCount)} {t("reportCount")}
-                      </div>
-                    </div>
-                    <div className="text-right flex items-center gap-2">
-                      <div>
-                        <div className="font-bold text-lg leading-none">
-                          {p.avgToday != null ? `${num(p.avgToday)}৳` : "—"}
-                        </div>
-                        <div className="mt-1.5">
-                          <ChangeBadge change={p.change} changePct={p.changePct} showAbs />
-                        </div>
-                      </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0 ml-1 hidden sm:block" />
+                    <div className="text-xs text-muted-foreground">
+                      {t("perUnit")} {tUnit(p.item.unit)} · {num(p.reportCount)} {t("reportCount")}
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="text-right flex items-center gap-2">
+                    <div>
+                      <div className="font-bold text-lg leading-none">
+                        {p.avgToday != null ? `${num(p.avgToday)}৳` : "—"}
+                      </div>
+                      <div className="mt-1.5">
+                        <ChangeBadge change={p.change} changePct={p.changePct} showAbs />
+                      </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0 ml-1 hidden sm:block" />
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>

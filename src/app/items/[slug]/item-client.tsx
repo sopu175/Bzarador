@@ -56,7 +56,9 @@ export function ItemDetailClient({
   const [timeframe, setTimeframe] = useState<"7d" | "30d" | "1y">("7d");
 
   const markets = details?.markets ?? [];
-  const validPrices = markets.filter((m: any) => m.avgToday != null).map((m: any) => m.avgToday as number);
+  const validPrices = markets
+    .filter((m: any) => m.avgToday != null)
+    .map((m: any) => m.avgToday as number);
   const minPrice = validPrices.length ? Math.min(...validPrices) : null;
   const maxPrice = validPrices.length ? Math.max(...validPrices) : null;
   const avgPrice = validPrices.length
@@ -107,16 +109,26 @@ export function ItemDetailClient({
         {validPrices.length > 0 && (
           <div className="grid grid-cols-3 gap-2 p-4 bg-card text-center border-b border-border/40">
             <div className="p-2.5 rounded-xl bg-primary/10">
-              <div className="text-[10px] text-muted-foreground uppercase font-semibold">{t("trendsAvg")}</div>
+              <div className="text-[10px] text-muted-foreground uppercase font-semibold">
+                {t("trendsAvg")}
+              </div>
               <div className="text-lg font-bold text-primary">{num(avgPrice)}৳</div>
             </div>
             <div className="p-2.5 rounded-xl bg-green-500/10">
-              <div className="text-[10px] text-green-700 dark:text-green-300 uppercase font-semibold">{t("trendsMin")}</div>
-              <div className="text-lg font-bold text-green-700 dark:text-green-300">{num(minPrice)}৳</div>
+              <div className="text-[10px] text-green-700 dark:text-green-300 uppercase font-semibold">
+                {t("trendsMin")}
+              </div>
+              <div className="text-lg font-bold text-green-700 dark:text-green-300">
+                {num(minPrice)}৳
+              </div>
             </div>
             <div className="p-2.5 rounded-xl bg-red-500/10">
-              <div className="text-[10px] text-red-700 dark:text-red-300 uppercase font-semibold">{t("trendsMax")}</div>
-              <div className="text-lg font-bold text-red-700 dark:text-red-300">{num(maxPrice)}৳</div>
+              <div className="text-[10px] text-red-700 dark:text-red-300 uppercase font-semibold">
+                {t("trendsMax")}
+              </div>
+              <div className="text-lg font-bold text-red-700 dark:text-red-300">
+                {num(maxPrice)}৳
+              </div>
             </div>
           </div>
         )}
@@ -204,7 +216,9 @@ export function ItemDetailClient({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <Store className="h-4 w-4 text-primary" />
-              <span>{t("marketBreakdown")} ({num(markets.length)})</span>
+              <span>
+                {t("marketBreakdown")} ({num(markets.length)})
+              </span>
             </CardTitle>
             <span className="text-xs text-muted-foreground">১১টি বাজার বিশ্লেষণ</span>
           </div>
@@ -235,7 +249,9 @@ export function ItemDetailClient({
                       </div>
                       <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5 flex-wrap">
                         <MapPin className="h-3 w-3 text-muted-foreground/70 shrink-0" />
-                        <span>{m.upazila}, {m.district}</span>
+                        <span>
+                          {m.upazila}, {m.district}
+                        </span>
                         <span>·</span>
                         <span className="font-medium text-primary inline-flex items-center gap-1 hover:underline">
                           {num(m.reportCount)} {t("reportCount")}
@@ -287,7 +303,8 @@ export function ItemDetailClient({
                     <div className="bg-secondary/20 border-t border-border/40 px-4 py-3 space-y-2">
                       <div className="flex items-center justify-between text-xs font-medium text-muted-foreground pb-1 border-b border-border/30">
                         <span>
-                          {tr(m.nameBn, m.nameEn)} — {num(reportsList.length)} {t("individualReports")}
+                          {tr(m.nameBn, m.nameEn)} — {num(reportsList.length)}{" "}
+                          {t("individualReports")}
                         </span>
                         <span className="text-[11px]">প্রতি কেজি / একক মূল্য</span>
                       </div>
@@ -359,7 +376,9 @@ export function ItemDetailClient({
                                   <span className="font-bold text-sm text-foreground">
                                     {num(r.price)}
                                   </span>
-                                  <span className="text-[11px] text-muted-foreground ml-0.5">৳</span>
+                                  <span className="text-[11px] text-muted-foreground ml-0.5">
+                                    ৳
+                                  </span>
                                 </div>
                               </div>
                             );
@@ -376,11 +395,7 @@ export function ItemDetailClient({
       </Card>
 
       {/* Community Voting */}
-      <PriceAccuracyVoting
-        itemId={item.id}
-        itemNameBn={item.nameBn}
-        itemNameEn={item.nameEn}
-      />
+      <PriceAccuracyVoting itemId={item.id} itemNameBn={item.nameBn} itemNameEn={item.nameEn} />
     </div>
   );
 }

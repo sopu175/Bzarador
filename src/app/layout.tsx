@@ -17,7 +17,9 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://bazar-dor-bangladesh.vercel.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "https://bazar-dor-bangladesh.vercel.app"
+  ),
   title: "বাজার দাম — Bangladesh Kitchen Market Prices",
   description:
     "Real-time kitchen market prices across Bangladesh. See today's vegetable, fish, meat, fruit, rice and spice prices at your local bazaar. Community-driven price reports.",
@@ -41,7 +43,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "বাজার দাম — Bangladesh Kitchen Market Prices",
-    description: "Discover real-time, verified prices at your local market with historical and community trends.",
+    description:
+      "Discover real-time, verified prices at your local market with historical and community trends.",
     type: "website",
     url: "https://bazar-dor-bangladesh.vercel.app",
     siteName: "বাজার দাম",

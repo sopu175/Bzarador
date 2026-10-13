@@ -114,7 +114,9 @@ export function DistrictDetailClient({
                         <MapPin className="h-3 w-3 text-muted-foreground/70" />
                         <span>{m.upazila}</span>
                         <span>·</span>
-                        <span>{num(m._count?.reports ?? 0)} {t("statReports")}</span>
+                        <span>
+                          {num(m._count?.reports ?? 0)} {t("statReports")}
+                        </span>
                       </div>
                     </div>
                   </div>

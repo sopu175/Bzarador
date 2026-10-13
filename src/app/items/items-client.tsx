@@ -54,9 +54,13 @@ export function ItemsListClient({ items }: { items: any[] }) {
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl flex items-center gap-2">
               <PackageSearch className="h-5 w-5 text-primary" />
-              <span>{lang === "bn" ? "সকল পণ্য" : "All Items"} ({num(items.length)})</span>
+              <span>
+                {lang === "bn" ? "সকল পণ্য" : "All Items"} ({num(items.length)})
+              </span>
             </CardTitle>
-            <Badge variant="secondary">{num(filtered.length)} {t("statItems")}</Badge>
+            <Badge variant="secondary">
+              {num(filtered.length)} {t("statItems")}
+            </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             {lang === "bn"
@@ -72,7 +76,11 @@ export function ItemsListClient({ items }: { items: any[] }) {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={lang === "bn" ? "পণ্যের নাম খুঁজুন (যেমন আলু, পেঁয়াজ, রুই মাছ)..." : "Search item (e.g. Potato, Onion, Beef)..."}
+              placeholder={
+                lang === "bn"
+                  ? "পণ্যের নাম খুঁজুন (যেমন আলু, পেঁয়াজ, রুই মাছ)..."
+                  : "Search item (e.g. Potato, Onion, Beef)..."
+              }
               className="pl-9 h-10 bg-background"
             />
           </div>

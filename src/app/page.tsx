@@ -58,27 +58,45 @@ function AppShell() {
             <LiveUpdatePanel />
             <Tabs defaultValue="today" className="w-full">
               <TabsList className="grid grid-cols-3 sm:grid-cols-6 w-full h-auto p-1 rounded-2xl gap-1 bg-secondary/50">
-                <TabsTrigger value="today" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="today"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <PackageSearch className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabToday")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="markets" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="markets"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <Store className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabMarkets")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="report" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="report"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <Megaphone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabReport")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="trends" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="trends"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <LineChart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabTrends")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="alerts" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="alerts"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <BellRing className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabAlerts")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="feedback" className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs">
+                <TabsTrigger
+                  value="feedback"
+                  className="flex flex-col gap-1 py-2 px-1 text-[11px] sm:flex-row sm:text-xs"
+                >
                   <MessageSquarePlus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="truncate">{t("tabFeedback")}</span>
                 </TabsTrigger>
@@ -187,7 +205,9 @@ function Hero() {
                   <span>{location.district}</span>
                 </>
               ) : (
-                <span>{lang === "bn" ? "১১টি বাজার · সর্বশেষ আপডেট" : "11 markets · latest updates"}</span>
+                <span>
+                  {lang === "bn" ? "১১টি বাজার · সর্বশেষ আপডেট" : "11 markets · latest updates"}
+                </span>
               )}
             </span>
           </div>

@@ -8,13 +8,17 @@ export async function GET(request: Request) {
   const secret = searchParams.get("secret");
   const authHeader = request.headers.get("authorization");
 
-  const expectedSecret = process.env.SYNC_SECRET || process.env.CRON_SECRET || "bazar-dor-sync-2026";
+  const expectedSecret =
+    process.env.SYNC_SECRET || process.env.CRON_SECRET || "bazar-dor-sync-2026";
 
   const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
   const provided = secret || bearerToken;
 
   if (provided !== expectedSecret) {
-    return NextResponse.json({ error: "Unauthorized: Invalid or missing sync secret" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized: Invalid or missing sync secret" },
+      { status: 401 }
+    );
   }
 
   try {

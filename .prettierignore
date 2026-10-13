@@ -1,0 +1,21 @@
+# Dependencies & Builds
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Database files
+*.db
+*.db-journal
+db/backups/
+
+# Logs & Environment
+*.log
+.env*
+!.env.example
+
+# OS & Editors
+.DS_Store
+.idea/
+.vscode/

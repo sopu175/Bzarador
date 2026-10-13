@@ -1,11 +1,22 @@
 import Link from "next/link";
-import { ArrowLeft, HelpCircle, CheckCircle2, ChevronRight, ShieldCheck, Database, Radio, BellRing, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  HelpCircle,
+  CheckCircle2,
+  ChevronRight,
+  ShieldCheck,
+  Database,
+  Radio,
+  BellRing,
+  Sparkles,
+} from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/bazar/site-header-footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = {
   title: "সাধারণ জিজ্ঞাসা ও তথ্য (FAQ) | বাজার দাম",
-  description: "বাজার দাম অ্যাপ্লিকেশন কিভাবে কাজ করে, কোথা থেকে তথ্য সংগ্রহ করা হয় এবং কীভাবে ব্যবহার করবেন তার বিস্তারিত প্রশ্নোত্তর।",
+  description:
+    "বাজার দাম অ্যাপ্লিকেশন কিভাবে কাজ করে, কোথা থেকে তথ্য সংগ্রহ করা হয় এবং কীভাবে ব্যবহার করবেন তার বিস্তারিত প্রশ্নোত্তর।",
 };
 
 const faqs = [
@@ -63,7 +74,8 @@ export default function FAQPage() {
             সাধারণ জিজ্ঞাসা ও সাহায্য (FAQ)
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            বাজার দাম অ্যাপ্লিকেশনটি কিভাবে কাজ করে, তথ্য কিভাবে প্রক্রিয়াজাত হয় এবং ব্যবহার করার নিয়মাবলী।
+            বাজার দাম অ্যাপ্লিকেশনটি কিভাবে কাজ করে, তথ্য কিভাবে প্রক্রিয়াজাত হয় এবং ব্যবহার করার
+            নিয়মাবলী।
           </p>
         </div>
 
@@ -71,9 +83,7 @@ export default function FAQPage() {
           {faqs.map((faq, i) => (
             <Card key={i} className="border-border/60 hover:border-primary/40 transition-colors">
               <CardHeader className="p-4 pb-2">
-                <CardTitle className="text-base font-bold text-foreground">
-                  {faq.q}
-                </CardTitle>
+                <CardTitle className="text-base font-bold text-foreground">{faq.q}</CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-1 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {faq.a}
@@ -85,8 +95,12 @@ export default function FAQPage() {
         {/* Quick Links Card */}
         <div className="p-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 via-card to-accent/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div className="font-semibold text-sm text-foreground">অন্যান্য তথ্যের পাতা সমূহ দেখুন</div>
-            <div className="text-xs text-muted-foreground mt-0.5">উৎস তালিকা, গোপনীয়তা ও ব্যবহারের শর্তাবলী</div>
+            <div className="font-semibold text-sm text-foreground">
+              অন্যান্য তথ্যের পাতা সমূহ দেখুন
+            </div>
+            <div className="text-xs text-muted-foreground mt-0.5">
+              উৎস তালিকা, গোপনীয়তা ও ব্যবহারের শর্তাবলী
+            </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <Link

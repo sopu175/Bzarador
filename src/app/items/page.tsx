@@ -9,7 +9,8 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "সকল ৫৪টি পণ্যের তালিকা ও আজকের দর | বাজার দাম",
-  description: "বাজার দাম-এ তালিকাভুক্ত সকল ৫৪টি শাকসবজি, মাছ, মাংস, চাল, ডাল ও নিত্যপণ্যের বাজার দর ও বিস্তারিত তথ্য।",
+  description:
+    "বাজার দাম-এ তালিকাভুক্ত সকল ৫৪টি শাকসবজি, মাছ, মাংস, চাল, ডাল ও নিত্যপণ্যের বাজার দর ও বিস্তারিত তথ্য।",
 };
 
 export default async function ItemsIndexPage() {

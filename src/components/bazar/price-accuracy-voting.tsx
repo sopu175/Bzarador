@@ -111,7 +111,9 @@ export function PriceAccuracyVoting({
           >
             <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
             <span>{t("voteAccurate")}</span>
-            <span className="text-[10px] font-bold opacity-80 tabular-nums">({num(accurateCount)})</span>
+            <span className="text-[10px] font-bold opacity-80 tabular-nums">
+              ({num(accurateCount)})
+            </span>
           </Button>
 
           <Button
@@ -123,7 +125,9 @@ export function PriceAccuracyVoting({
           >
             <TrendingUp className="h-3.5 w-3.5 text-red-500" />
             <span>{t("voteHigh")}</span>
-            <span className="text-[10px] font-bold opacity-80 tabular-nums">({num(highCount)})</span>
+            <span className="text-[10px] font-bold opacity-80 tabular-nums">
+              ({num(highCount)})
+            </span>
           </Button>
 
           <Button
@@ -135,7 +139,9 @@ export function PriceAccuracyVoting({
           >
             <TrendingDown className="h-3.5 w-3.5 text-emerald-600" />
             <span>{t("voteCheap")}</span>
-            <span className="text-[10px] font-bold opacity-80 tabular-nums">({num(cheapCount)})</span>
+            <span className="text-[10px] font-bold opacity-80 tabular-nums">
+              ({num(cheapCount)})
+            </span>
           </Button>
         </div>
       </CardContent>

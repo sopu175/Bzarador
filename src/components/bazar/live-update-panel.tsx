@@ -76,7 +76,10 @@ export function LiveUpdatePanel() {
           <div className="min-w-0 flex-1">
             <div className="font-semibold text-sm sm:text-base flex items-center gap-1.5 flex-wrap">
               <span>{t("liveUpdate")}</span>
-              <Badge variant="outline" className="text-[10px] py-0 gap-1 border-primary/40 text-primary">
+              <Badge
+                variant="outline"
+                className="text-[10px] py-0 gap-1 border-primary/40 text-primary"
+              >
                 <Radio className="h-2 w-2" />
                 {t("liveBadge")}
               </Badge>
@@ -88,7 +91,11 @@ export function LiveUpdatePanel() {
             </p>
           </div>
         </div>
-        <Button onClick={onFetch} disabled={fetching} className="w-full sm:w-auto shrink-0 h-8 sm:h-9 text-xs sm:text-sm shadow-xs">
+        <Button
+          onClick={onFetch}
+          disabled={fetching}
+          className="w-full sm:w-auto shrink-0 h-8 sm:h-9 text-xs sm:text-sm shadow-xs"
+        >
           {fetching ? (
             <>
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -125,16 +132,21 @@ export function LiveUpdatePanel() {
                 <span className="inline-flex items-center gap-1.5 flex-wrap">
                   <span>{t("liveSources")}:</span>
                   {sources.map((s) => {
-                    let href = "https://www.google.com/search?q=" + encodeURIComponent(s + " বাজার দর বাংলাদেশ");
+                    let href =
+                      "https://www.google.com/search?q=" +
+                      encodeURIComponent(s + " বাজার দর বাংলাদেশ");
                     const sLower = s.toLowerCase();
-                    if (sLower.includes("tbs") || sLower.includes("business standard")) href = "https://www.tbsnews.net";
-                    else if (sLower.includes("dhaka tribune")) href = "https://www.dhakatribune.com";
+                    if (sLower.includes("tbs") || sLower.includes("business standard"))
+                      href = "https://www.tbsnews.net";
+                    else if (sLower.includes("dhaka tribune"))
+                      href = "https://www.dhakatribune.com";
                     else if (sLower.includes("daily star")) href = "https://www.thedailystar.net";
                     else if (sLower.includes("prothom alo")) href = "https://www.prothomalo.com";
                     else if (sLower.includes("ittefaq")) href = "https://www.ittefaq.com.bd";
                     else if (sLower.includes("jago news")) href = "https://www.jagonews24.com";
                     else if (sLower.includes("dhaka post")) href = "https://www.dhakapost.com";
-                    else if (sLower.includes("dam") || sLower.includes("কৃষি বিপণন")) href = "http://www.dam.gov.bd";
+                    else if (sLower.includes("dam") || sLower.includes("কৃষি বিপণন"))
+                      href = "http://www.dam.gov.bd";
 
                     return (
                       <a
@@ -144,7 +156,10 @@ export function LiveUpdatePanel() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
                       >
-                        <Badge variant="secondary" className="text-[10px] py-0 cursor-pointer hover:bg-primary/15 hover:text-primary">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] py-0 cursor-pointer hover:bg-primary/15 hover:text-primary"
+                        >
                           {s} ↗
                         </Badge>
                       </a>

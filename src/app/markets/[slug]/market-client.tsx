@@ -2,7 +2,15 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, Store, MapPin, Search, ChevronRight, TrendingUp, TrendingDown } from "lucide-react";
+import {
+  ArrowLeft,
+  Store,
+  MapPin,
+  Search,
+  ChevronRight,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,10 +40,7 @@ export function MarketDetailClient({ market, prices }: { market: any; prices: an
     return prices.filter((p) => {
       const matchCat = selectedCat === "all" || p.item.category === selectedCat;
       const q = search.trim().toLowerCase();
-      const matchQuery =
-        !q ||
-        p.item.nameEn.toLowerCase().includes(q) ||
-        p.item.nameBn.includes(q);
+      const matchQuery = !q || p.item.nameEn.toLowerCase().includes(q) || p.item.nameBn.includes(q);
       return matchCat && matchQuery;
     });
   }, [prices, selectedCat, search]);
@@ -70,7 +75,9 @@ export function MarketDetailClient({ market, prices }: { market: any; prices: an
                 </h1>
                 <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
                   <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span>{market.upazila}, {market.district}</span>
+                  <span>
+                    {market.upazila}, {market.district}
+                  </span>
                   <span>·</span>
                   <Link
                     href={`/districts/${toSlug(market.district)}`}
@@ -108,7 +115,9 @@ export function MarketDetailClient({ market, prices }: { market: any; prices: an
             <CardTitle className="text-base flex items-center gap-2">
               <span>{lang === "bn" ? "আজকের পণ্যের দর" : "Today's Item Prices"}</span>
             </CardTitle>
-            <Badge variant="secondary">{num(filtered.length)} {t("statItems")}</Badge>
+            <Badge variant="secondary">
+              {num(filtered.length)} {t("statItems")}
+            </Badge>
           </div>
         </CardHeader>
 
@@ -119,7 +128,9 @@ export function MarketDetailClient({ market, prices }: { market: any; prices: an
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={lang === "bn" ? "এই বাজারের পণ্য খুঁজুন..." : "Search items in this market..."}
+              placeholder={
+                lang === "bn" ? "এই বাজারের পণ্য খুঁজুন..." : "Search items in this market..."
+              }
               className="pl-9 h-10 bg-background"
             />
           </div>
@@ -165,7 +176,8 @@ export function MarketDetailClient({ market, prices }: { market: any; prices: an
                         </Badge>
                       </div>
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        {t("perUnit")} {tUnit(p.item.unit)} · {num(p.reportCount)} {t("reportCount")}
+                        {t("perUnit")} {tUnit(p.item.unit)} · {num(p.reportCount)}{" "}
+                        {t("reportCount")}
                       </div>
                     </div>
                   </div>

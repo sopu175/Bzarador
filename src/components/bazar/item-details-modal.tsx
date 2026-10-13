@@ -12,7 +12,13 @@ import {
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useT, useTr, useTUnit, useTCat, useNum, useLang } from "@/lib/i18n";
@@ -140,16 +146,26 @@ export function ItemDetailsModal({
         {validPrices.length > 0 && (
           <div className="grid grid-cols-3 gap-2 px-5 py-3 bg-card border-b border-border/40 text-center">
             <div className="p-2 rounded-xl bg-primary/10">
-              <div className="text-[10px] text-muted-foreground uppercase font-semibold">{t("trendsAvg")}</div>
+              <div className="text-[10px] text-muted-foreground uppercase font-semibold">
+                {t("trendsAvg")}
+              </div>
               <div className="text-base font-bold text-primary">{num(avgPrice)}৳</div>
             </div>
             <div className="p-2 rounded-xl bg-green-500/10">
-              <div className="text-[10px] text-green-700 dark:text-green-300 uppercase font-semibold">{t("trendsMin")}</div>
-              <div className="text-base font-bold text-green-700 dark:text-green-300">{num(minPrice)}৳</div>
+              <div className="text-[10px] text-green-700 dark:text-green-300 uppercase font-semibold">
+                {t("trendsMin")}
+              </div>
+              <div className="text-base font-bold text-green-700 dark:text-green-300">
+                {num(minPrice)}৳
+              </div>
             </div>
             <div className="p-2 rounded-xl bg-red-500/10">
-              <div className="text-[10px] text-red-700 dark:text-red-300 uppercase font-semibold">{t("trendsMax")}</div>
-              <div className="text-base font-bold text-red-700 dark:text-red-300">{num(maxPrice)}৳</div>
+              <div className="text-[10px] text-red-700 dark:text-red-300 uppercase font-semibold">
+                {t("trendsMax")}
+              </div>
+              <div className="text-base font-bold text-red-700 dark:text-red-300">
+                {num(maxPrice)}৳
+              </div>
             </div>
           </div>
         )}
@@ -266,7 +282,8 @@ export function ItemDetailsModal({
                       <div className="bg-secondary/20 border-t border-border/40 px-4 py-3 space-y-2">
                         <div className="flex items-center justify-between text-xs font-medium text-muted-foreground pb-1 border-b border-border/30">
                           <span>
-                            {tr(m.nameBn, m.nameEn)} — {num(reportsList.length)} {t("individualReports")}
+                            {tr(m.nameBn, m.nameEn)} — {num(reportsList.length)}{" "}
+                            {t("individualReports")}
                           </span>
                           <span className="text-[11px]">প্রতি কেজি / একক মূল্য</span>
                         </div>
@@ -338,7 +355,9 @@ export function ItemDetailsModal({
                                     <span className="font-bold text-sm text-foreground">
                                       {num(r.price)}
                                     </span>
-                                    <span className="text-[11px] text-muted-foreground ml-0.5">৳</span>
+                                    <span className="text-[11px] text-muted-foreground ml-0.5">
+                                      ৳
+                                    </span>
                                   </div>
                                 </div>
                               );

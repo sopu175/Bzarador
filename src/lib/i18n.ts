@@ -70,8 +70,14 @@ const dict = {
   reportYourName: { bn: "আপনার নাম (ঐচ্ছিক)", en: "Your Name (optional)" },
   reportPhone: { bn: "মোবাইল নম্বর (ঐচ্ছিক)", en: "Mobile (optional)" },
   reportSubmit: { bn: "দাম জমা দিন", en: "Submit Price" },
-  reportSuccess: { bn: "ধন্যবাদ! আপনার দাম যোগ হয়েছে।", en: "Thank you! Your price has been added." },
-  reportError: { bn: "ত্রুটি হয়েছে, আবার চেষ্টা করুন।", en: "An error occurred, please try again." },
+  reportSuccess: {
+    bn: "ধন্যবাদ! আপনার দাম যোগ হয়েছে।",
+    en: "Thank you! Your price has been added.",
+  },
+  reportError: {
+    bn: "ত্রুটি হয়েছে, আবার চেষ্টা করুন।",
+    en: "An error occurred, please try again.",
+  },
   reportPickItem: { bn: "পণ্য বাছুন", en: "Pick an item" },
   reportPickMarket: { bn: "বাজার বাছুন", en: "Pick a market" },
   // Trends
@@ -102,10 +108,19 @@ const dict = {
   alertsBelow: { bn: "এর নিচে নামলে", en: "When price drops below" },
   alertsAbove: { bn: "এর উপরে উঠলে", en: "When price rises above" },
   alertsCreate: { bn: "সতর্কতা তৈরি করুন", en: "Create Alert" },
-  alertsSuccess: { bn: "সতর্কতা তৈরি হয়েছে এবং নিশ্চিতকরণ ইমেইল পাঠানো হয়েছে!", en: "Alert created and confirmation email sent!" },
-  alertsError: { bn: "ত্রুটি হয়েছে, অনুগ্রহ করে সঠিক ইমেইল ও তথ্য দিন।", en: "An error occurred. Please provide valid email and details." },
+  alertsSuccess: {
+    bn: "সতর্কতা তৈরি হয়েছে এবং নিশ্চিতকরণ ইমেইল পাঠানো হয়েছে!",
+    en: "Alert created and confirmation email sent!",
+  },
+  alertsError: {
+    bn: "ত্রুটি হয়েছে, অনুগ্রহ করে সঠিক ইমেইল ও তথ্য দিন।",
+    en: "An error occurred. Please provide valid email and details.",
+  },
   alertsYourAlerts: { bn: "আপনার সতর্কতা সমূহ", en: "Your Alerts" },
-  alertsFind: { bn: "ইমেইল দিয়ে আপনার পূর্ববর্তী সতর্কতা খুঁজুন", en: "Find your alerts with email" },
+  alertsFind: {
+    bn: "ইমেইল দিয়ে আপনার পূর্ববর্তী সতর্কতা খুঁজুন",
+    en: "Find your alerts with email",
+  },
   alertsFindBtn: { bn: "খুঁজুন", en: "Find" },
   alertsNoAlerts: { bn: "কোনো সতর্কতা পাওয়া যায়নি", en: "No alerts found" },
   alertsCurrentAvg: { bn: "বর্তমান গড় দাম", en: "Current Avg Price" },
@@ -151,10 +166,19 @@ const dict = {
   // Live update
   liveUpdate: { bn: "লাইভ দাম আপডেট", en: "Live Update" },
   liveFetchBtn: { bn: "অনলাইন থেকে আনুন", en: "Fetch Live Prices" },
-  liveFetching: { bn: "আনা হচ্ছে... একটি মিনিট সময় লাগতে পারে", en: "Fetching... may take a minute" },
+  liveFetching: {
+    bn: "আনা হচ্ছে... একটি মিনিট সময় লাগতে পারে",
+    en: "Fetching... may take a minute",
+  },
   liveSuccess: { bn: "লাইভ দাম আপডেট হয়েছে!", en: "Live prices updated!" },
-  liveSuccessDesc: { bn: "{n} টি পণ্যের দাম অনলাইন থেকে আনা হয়েছে।", en: "Fetched prices for {n} items from the web." },
-  liveError: { bn: "লাইভ আপডেট ব্যর্থ হয়েছে। পরে আবার চেষ্টা করুন।", en: "Live update failed. Try again later." },
+  liveSuccessDesc: {
+    bn: "{n} টি পণ্যের দাম অনলাইন থেকে আনা হয়েছে।",
+    en: "Fetched prices for {n} items from the web.",
+  },
+  liveError: {
+    bn: "লাইভ আপডেট ব্যর্থ হয়েছে। পরে আবার চেষ্টা করুন।",
+    en: "Live update failed. Try again later.",
+  },
   liveLastUpdated: { bn: "সর্বশেষ আপডেট", en: "Last updated" },
   liveSources: { bn: "উৎস", en: "Sources" },
   liveNever: { bn: "এখনও লাইভ আপডেট হয়নি", en: "Never updated live" },
@@ -180,7 +204,10 @@ const dict = {
   resetFilters: { bn: "ফিল্টার মুছুন", en: "Reset filters" },
   // Details Modal
   itemDetailsTitle: { bn: "পণ্যের বিস্তারিত তথ্য", en: "Item Price Details" },
-  itemDetailsDesc: { bn: "১১টি বাজারের বর্তমান ও ঐতিহাসিক দামের বিশ্লেষণ", en: "Current & historical analysis across 11 markets" },
+  itemDetailsDesc: {
+    bn: "১১টি বাজারের বর্তমান ও ঐতিহাসিক দামের বিশ্লেষণ",
+    en: "Current & historical analysis across 11 markets",
+  },
   marketBreakdown: { bn: "বাজার ভেদে আজকের দাম", en: "Today's price across markets" },
   viewTrendsForThis: { bn: "দামের পূর্ণাঙ্গ ধারা দেখুন", en: "View full trend analysis" },
   closeBtn: { bn: "বন্ধ করুন", en: "Close" },
@@ -190,14 +217,23 @@ const dict = {
   // Feedback Tab
   tabFeedback: { bn: "মতামত দিন", en: "Feedback" },
   feedbackTitle: { bn: "ব্যবহারকারীর মতামত ও পর্যালোচনা", en: "User Feedback & Reviews" },
-  feedbackSubtitle: { bn: "আপনার অভিজ্ঞতা ও পরামর্শ জানান", en: "Share your thoughts and suggestions" },
+  feedbackSubtitle: {
+    bn: "আপনার অভিজ্ঞতা ও পরামর্শ জানান",
+    en: "Share your thoughts and suggestions",
+  },
   feedbackName: { bn: "আপনার নাম (ঐচ্ছিক)", en: "Your Name (optional)" },
   feedbackEmail: { bn: "ইমেইল (ঐচ্ছিক)", en: "Email (optional)" },
   feedbackCategory: { bn: "বিষয়ের ধরন", en: "Category" },
   feedbackRating: { bn: "রেটিং দিন", en: "Rating" },
-  feedbackComment: { bn: "আপনার মন্তব্য বা পরামর্শ লিখুন...", en: "Write your feedback or ideas..." },
+  feedbackComment: {
+    bn: "আপনার মন্তব্য বা পরামর্শ লিখুন...",
+    en: "Write your feedback or ideas...",
+  },
   feedbackSubmit: { bn: "মতামত জমা দিন", en: "Submit Feedback" },
-  feedbackSuccess: { bn: "ধন্যবাদ! আপনার মূল্যবান মতামত গৃহীত হয়েছে।", en: "Thank you! Your feedback has been received." },
+  feedbackSuccess: {
+    bn: "ধন্যবাদ! আপনার মূল্যবান মতামত গৃহীত হয়েছে।",
+    en: "Thank you! Your feedback has been received.",
+  },
   feedbackRecent: { bn: "সাম্প্রতিক মতামত", en: "Recent Feedback" },
   // Voting
   voteAccurate: { bn: "সঠিক দাম", en: "Accurate" },
@@ -252,8 +288,16 @@ export function useTCat() {
 export function toBnDigits(n: number | string, lang: Lang): string {
   if (lang !== "bn") return String(n);
   const map: Record<string, string> = {
-    "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
-    "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯",
+    "0": "০",
+    "1": "১",
+    "2": "২",
+    "3": "৩",
+    "4": "৪",
+    "5": "৫",
+    "6": "৬",
+    "7": "৭",
+    "8": "৮",
+    "9": "৯",
   };
   return String(n).replace(/[0-9]/g, (d) => map[d] ?? d);
 }

@@ -9,7 +9,8 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "সকল ৮টি জেলার তালিকা ও বাজার সমূহ | বাজার দাম",
-  description: "ঢাকা, চট্টগ্রাম, সিলেট, রাজশাহী, বরিশাল, খুলনা, কুমিল্লা, গাজীপুর জেলাভিত্তিক বাজার ও নিত্যপণ্যের দাম।",
+  description:
+    "ঢাকা, চট্টগ্রাম, সিলেট, রাজশাহী, বরিশাল, খুলনা, কুমিল্লা, গাজীপুর জেলাভিত্তিক বাজার ও নিত্যপণ্যের দাম।",
 };
 
 export default async function DistrictsIndexPage() {

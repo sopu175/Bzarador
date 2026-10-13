@@ -1,13 +1,30 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, TrendingUp, TrendingDown, PackageOpen, Radio, ArrowUpDown, SlidersHorizontal, RotateCcw, ChevronRight, Loader2 } from "lucide-react";
+import {
+  Search,
+  TrendingUp,
+  TrendingDown,
+  PackageOpen,
+  Radio,
+  ArrowUpDown,
+  SlidersHorizontal,
+  RotateCcw,
+  ChevronRight,
+  Loader2,
+} from "lucide-react";
 import { useT, useTr, useTUnit, useTCat, useNum, useLang } from "@/lib/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import { ChangeBadge } from "./change-badge";
 import { ItemDetailsModal } from "./item-details-modal";
@@ -55,8 +72,12 @@ export function TodayTab() {
 
   const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState<string>("all");
-  const [directionFilter, setDirectionFilter] = useState<"all" | "gainers" | "losers" | "steady">("all");
-  const [sortBy, setSortBy] = useState<"popular" | "price-asc" | "price-desc" | "change-desc" | "change-asc">("popular");
+  const [directionFilter, setDirectionFilter] = useState<"all" | "gainers" | "losers" | "steady">(
+    "all"
+  );
+  const [sortBy, setSortBy] = useState<
+    "popular" | "price-asc" | "price-desc" | "change-desc" | "change-asc"
+  >("popular");
   const [liveOnly, setLiveOnly] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
@@ -83,7 +104,8 @@ export function TodayTab() {
       const q = search.trim().toLowerCase();
       const allowEnSearch = process.env.NEXT_PUBLIC_ENABLE_ENGLISH_SEARCH !== "false";
       list = list.filter((p) => {
-        const matchesBn = p.item.nameBn.toLowerCase().includes(q) || p.item.nameBn.includes(search.trim());
+        const matchesBn =
+          p.item.nameBn.toLowerCase().includes(q) || p.item.nameBn.includes(search.trim());
         const matchesEn = allowEnSearch && p.item.nameEn.toLowerCase().includes(q);
         return matchesBn || matchesEn;
       });
@@ -155,10 +177,7 @@ export function TodayTab() {
     return () => observer.unobserve(el);
   }, [filtered.length]);
 
-  const visiblePrices = useMemo(
-    () => filtered.slice(0, visibleCount),
-    [filtered, visibleCount]
-  );
+  const visiblePrices = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
   const hasMore = visibleCount < filtered.length;
 
   const liveCount = categoryFilteredPrices.filter((p) => p.liveSource).length;
@@ -376,9 +395,7 @@ export function TodayTab() {
         </CardHeader>
         <CardContent className="p-0">
           {isError ? (
-            <div className="p-6 text-center text-sm text-destructive">
-              {t("noResults")}
-            </div>
+            <div className="p-6 text-center text-sm text-destructive">{t("noResults")}</div>
           ) : isLoading ? (
             <div className="p-4 space-y-2">
               {Array.from({ length: 8 }).map((_, i) => (
@@ -512,7 +529,10 @@ function PriceRowCard({ row, onClick }: { row: PriceRow; onClick: () => void }) 
               {t("liveBadge")}
             </a>
           )}
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0 hidden sm:inline-flex font-normal">
+          <Badge
+            variant="outline"
+            className="text-[10px] px-1.5 py-0 hidden sm:inline-flex font-normal"
+          >
             {tCat(row.item.category)}
           </Badge>
         </div>
@@ -528,7 +548,9 @@ function PriceRowCard({ row, onClick }: { row: PriceRow; onClick: () => void }) 
               )}
             </span>
           ) : (
-            <span>{t("perUnit")} {tUnit(row.item.unit)} · ১১টি বাজার</span>
+            <span>
+              {t("perUnit")} {tUnit(row.item.unit)} · ১১টি বাজার
+            </span>
           )}
         </div>
       </div>
@@ -610,7 +632,9 @@ function MoversCard({
                 onClick={() => onSelect?.(r.item.id)}
                 className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-secondary transition-colors cursor-pointer group"
               >
-                <span className="text-lg group-hover:scale-110 transition-transform">{r.item.emoji}</span>
+                <span className="text-lg group-hover:scale-110 transition-transform">
+                  {r.item.emoji}
+                </span>
                 <span className="flex-1 min-w-0 truncate text-sm font-medium group-hover:text-primary transition-colors">
                   {tr(r.item.nameBn, r.item.nameEn)}
                 </span>

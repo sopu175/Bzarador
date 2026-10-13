@@ -22,11 +22,7 @@ export default async function ReportsIndexPage() {
       <div className="min-h-screen flex flex-col market-bg">
         <SiteHeader />
         <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-6 space-y-6">
-          <ReportsListClient
-            totalCount={totalReports}
-            markets={markets}
-            items={items}
-          />
+          <ReportsListClient totalCount={totalReports} markets={markets} items={items} />
         </main>
         <SiteFooter />
       </div>
