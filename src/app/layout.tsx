@@ -17,6 +17,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://bazar-dor-bangladesh.vercel.app"),
   title: "বাজার দাম — Bangladesh Kitchen Market Prices",
   description:
     "Real-time kitchen market prices across Bangladesh. See today's vegetable, fish, meat, fruit, rice and spice prices at your local bazaar. Community-driven price reports.",
@@ -35,10 +36,18 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
     apple: "/favicon.svg",
   },
+  verification: {
+    google: "CCTqGOt2SWgZtmNUMO_kn8PQF4jo4C_ADxoHm8YeSpA",
+  },
   openGraph: {
     title: "বাজার দাম — Bangladesh Kitchen Market Prices",
     description: "Discover real-time, verified prices at your local market with historical and community trends.",
     type: "website",
+    url: "https://bazar-dor-bangladesh.vercel.app",
+    siteName: "বাজার দাম",
+  },
+  alternates: {
+    canonical: "https://bazar-dor-bangladesh.vercel.app",
   },
 };
 
@@ -49,12 +58,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-026YVGBS6C";
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   return (
     <html lang="bn" suppressHydrationWarning>
       <head>
+        {/* Google Site Verification */}
+        <meta
+          name="google-site-verification"
+          content="CCTqGOt2SWgZtmNUMO_kn8PQF4jo4C_ADxoHm8YeSpA"
+        />
+
         {/* Google Tag Manager (GTM) */}
         {gtmId && (
           <Script id="google-tag-manager" strategy="afterInteractive">
@@ -68,14 +83,29 @@ export default function RootLayout({
           </Script>
         )}
 
-        {/* Google Analytics 4 (GA4) */}
-        {gaId && (
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-026YVGBS6C"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-026YVGBS6C');
+          `}
+        </Script>
+
+        {/* Additional custom GA4 if provided via env */}
+        {gaId && gaId !== "G-026YVGBS6C" && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               strategy="afterInteractive"
             />
-            <Script id="google-analytics" strategy="afterInteractive">
+            <Script id="google-analytics-custom" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}

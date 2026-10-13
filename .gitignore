@@ -61,3 +61,4 @@ db/backups/
 # temporary
 test
 prompt
+.env*
